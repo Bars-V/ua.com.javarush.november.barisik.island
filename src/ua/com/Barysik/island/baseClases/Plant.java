@@ -3,12 +3,12 @@ package ua.com.Barysik.island.baseClases;
 public class Plant implements Amount, Weight{
     @Override
     public int amount() {
-        return 0;
+        return 200;
     }
 
     @Override
     public int weight() {
-        return 0;
+        return 1;
     }
 
     //рост
