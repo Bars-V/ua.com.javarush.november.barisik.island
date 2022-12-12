@@ -4,7 +4,6 @@ import ua.com.Barysik.island.baseClases.Predator;
 
 public class Wolf extends Predator {
 
-
     @Override
     public void run() {
         super.run();
@@ -22,17 +21,16 @@ public class Wolf extends Predator {
 
     @Override
     public void eat() {
-
+        super.eat();
     }
 
     @Override
-    public int weight() {
-        return 0;
+    public double weight() {
+        return super.weight();
     }
 
     @Override
     public int amount() {
-        return 0;
+        return super.amount();
     }
-
 }

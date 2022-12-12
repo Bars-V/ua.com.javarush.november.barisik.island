@@ -1,6 +1,6 @@
 package ua.com.Barysik.island;
 
-public class go {
+public class Go {
     public static void main(String[] args) {
 
     }
