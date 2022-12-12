@@ -43,5 +43,6 @@ public abstract class Animal implements Amount, Weight {
     public abstract void dead();
 
     //насыщение - через обращение к таблице
+    //метод для убывания насыщения
 
 }
