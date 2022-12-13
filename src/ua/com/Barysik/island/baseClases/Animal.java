@@ -1,20 +1,21 @@
 package ua.com.Barysik.island.baseClases;
 
 import ua.com.Barysik.island.settings.BaseParameters;
+import ua.com.Barysik.island.settings.EatTable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal implements Amount, Weight {
 
     // выбрать направление движения
-    private int chooseDirection(int i) {
+    public int chooseDirection(int i) {
         return ThreadLocalRandom.current().nextInt(i);
     }
 
     //    двигаться
     public void run() {
 
-        int index = 4; //количество направлений
+        int index = 5; //количество направлений
 
         for (int i = 0; i < BaseParameters.getSpeed(getClass().getSimpleName()); i++) {
 
@@ -29,13 +30,30 @@ public abstract class Animal implements Amount, Weight {
                 System.out.println("Идем вверх");
             } else if (selection == 3) {
                 System.out.println("Идем вниз");
+            } else if (selection == 4) {
+                System.out.println("Остаемся на месте");
             }
+        }
+    }
+
+    public <T> void hunt(T prey) {
+        int chanse = EatTable.getEatTable(getClass().getSimpleName(), prey.getClass().getSimpleName());
+        if(chanse == 100){
+            eat(prey);
+            return;
+        }
+        if(chanse == 0){
+            System.out.println(prey.getClass().getSimpleName() + " не еда для " + getClass().getSimpleName());
+        }
+        int rnd = chooseDirection(100)+1;
+        if (chanse >= rnd){
+            eat(prey);
         }
     }
 
 
     //Кушать
-    public <T> void eat(T eat) {
+    private  <T> void eat(T eat) {
 
 //        eat.dead(); // убиваем еду
 //        вынести в отдельный метод тогда можно переопределить растения и животных
@@ -51,6 +69,7 @@ public abstract class Animal implements Amount, Weight {
 
         //for test
 //        System.out.println(satietyChange);
+        System.out.println(getClass().getSimpleName() + " съел " + eat.getClass().getSimpleName());
     }
 
     //сытость
@@ -70,7 +89,7 @@ public abstract class Animal implements Amount, Weight {
             // объект умирает
             System.out.println(getClass().getSimpleName() + " is dead :(");
         }
-//        System.out.println(getClass().getSimpleName() + " принял на грудь " + change + " грамм и доволен");
+        System.out.println(getClass().getSimpleName() + " cъел " + change + " кг еды");
 
         return this.satiety;
     }

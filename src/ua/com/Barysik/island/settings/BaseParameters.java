@@ -13,6 +13,7 @@ public class BaseParameters {
    private static HashMap<String, Double> weight = new HashMap<>();
    private static HashMap<String, Integer> speed = new HashMap<>();
    private static HashMap<String, Double> eatWeith = new HashMap<>();
+   private static HashMap<String, Integer> children = new HashMap<>();
 
 
     public static int getAmount(String  animal) {
@@ -48,5 +49,14 @@ public class BaseParameters {
 
     public static double getEatWeith(String animal) {
         return eatWeith.get(animal);
+    }
+
+
+    public static void setChildren(String className, int value) {
+        children.put(className, value);
+    }
+
+    public static int getChildren(String animal) {
+        return children.get(animal);
     }
 }
