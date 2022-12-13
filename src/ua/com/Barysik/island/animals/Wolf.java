@@ -1,8 +1,13 @@
 package ua.com.Barysik.island.animals;
 
+import ua.com.Barysik.island.baseClases.Eat;
 import ua.com.Barysik.island.baseClases.Predator;
 
-public class Wolf extends Predator {
+public class Wolf extends Predator implements Eat {
+
+
+
+
 
     @Override
     public void run() {
@@ -17,11 +22,6 @@ public class Wolf extends Predator {
     @Override
     public void dead() {
 
-    }
-
-    @Override
-    public void eat() {
-        super.eat();
     }
 
     @Override

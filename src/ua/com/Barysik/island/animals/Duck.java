@@ -6,6 +6,11 @@ import ua.com.Barysik.island.baseClases.PredatorEat;
 
 public class Duck extends Herbivore implements PredatorEat, HerbivoreEat {
     @Override
+    public void dead() {
+
+    }
+
+    @Override
     public int amount() {
         return super.amount();
     }
@@ -20,15 +25,6 @@ public class Duck extends Herbivore implements PredatorEat, HerbivoreEat {
 
     }
 
-    @Override
-    public void dead() {
-
-    }
-
-    @Override
-    public void eat() {
-        super.eat();
-    }
 
     @Override
     public double weight() {

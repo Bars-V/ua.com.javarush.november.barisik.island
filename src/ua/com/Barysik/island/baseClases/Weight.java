@@ -1,10 +1,10 @@
 package ua.com.Barysik.island.baseClases;
 
-import ua.com.Barysik.island.settings.Table;
+import ua.com.Barysik.island.settings.BaseParameters;
 
 public interface Weight {
     //вес
    default double weight(){
-       return Table.getWeight(getClass().getSimpleName());
+       return BaseParameters.getWeight(getClass().getSimpleName());
    }
 }

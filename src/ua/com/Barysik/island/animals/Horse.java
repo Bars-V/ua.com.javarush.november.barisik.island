@@ -19,17 +19,16 @@ public class Horse extends Herbivore {
     }
 
     @Override
-    public void dead() {
-
-    }
-
-    @Override
     public double weight() {
         return super.weight();
     }
 
     @Override
-    public void eat() {
-        super.eat();
+    public void dead() {
+
     }
 }
+
+
+
+

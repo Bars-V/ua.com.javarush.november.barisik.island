@@ -9,6 +9,11 @@ public class Caterpillar extends Herbivore {
     }
 
     @Override
+    public void dead() {
+
+    }
+
+    @Override
     public void run() {
         super.run();
     }
@@ -16,16 +21,6 @@ public class Caterpillar extends Herbivore {
     @Override
     public void reproduction() {
 
-    }
-
-    @Override
-    public void dead() {
-
-    }
-
-    @Override
-    public void eat() {
-        super.eat();
     }
 
     @Override

@@ -1,13 +1,10 @@
 package ua.com.Barysik.island.baseClases;
 
-import ua.com.Barysik.island.settings.Table;
+import ua.com.Barysik.island.settings.BaseParameters;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal implements Amount, Weight {
-
-    //есть
-//    public abstract void eat();
 
     // выбрать направление движения
     private int chooseDirection(int i) {
@@ -16,9 +13,10 @@ public abstract class Animal implements Amount, Weight {
 
     //    двигаться
     public void run() {
+
         int index = 4; //количество направлений
 
-        for (int i = 0; i < Table.getSpeed(getClass().getSimpleName()) ; i++) {
+        for (int i = 0; i < BaseParameters.getSpeed(getClass().getSimpleName()); i++) {
 
             int selection = chooseDirection(index);
 
@@ -36,10 +34,13 @@ public abstract class Animal implements Amount, Weight {
     }
 
 
+
+
+
     //размножение
     public abstract void reproduction();
 
-    //умереть?
+    //    умереть?
     public abstract void dead();
 
     //насыщение - через обращение к таблице

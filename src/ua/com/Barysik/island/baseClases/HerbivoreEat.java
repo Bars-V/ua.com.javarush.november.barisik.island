@@ -1,10 +1,10 @@
 package ua.com.Barysik.island.baseClases;
 
-import ua.com.Barysik.island.settings.Table;
+import ua.com.Barysik.island.settings.BaseParameters;
 
 public interface HerbivoreEat {
     default void eat(){
-        System.out.println(Table.getEatWeith(getClass().getSimpleName()));
+        System.out.println(BaseParameters.getEatWeith(getClass().getSimpleName()));
 
         //если есть трава, то съедать Table.getEatWeith(getClass().getSimpleName())
 
