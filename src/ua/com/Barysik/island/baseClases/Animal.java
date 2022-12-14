@@ -1,14 +1,13 @@
 package ua.com.Barysik.island.baseClases;
 
-import ua.com.Barysik.island.settings.BaseParameters;
-import ua.com.Barysik.island.settings.EatTable;
+import ua.com.Barysik.island.settings.Parameters;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal implements Amount, Weight {
 
     // выбрать направление движения
-    public int chooseDirection(int i) {
+    private int chooseDirection(int i) {
         return ThreadLocalRandom.current().nextInt(i);
     }
 
@@ -17,7 +16,7 @@ public abstract class Animal implements Amount, Weight {
 
         int index = 5; //количество направлений
 
-        for (int i = 0; i < BaseParameters.getSpeed(getClass().getSimpleName()); i++) {
+        for (int i = 0; i < Parameters.getParameter("speed", getClass().getSimpleName()); i++) {
 
             int selection = chooseDirection(index);
 
@@ -37,7 +36,7 @@ public abstract class Animal implements Amount, Weight {
     }
 
     public <T> void hunt(T prey) {
-        int chanse = EatTable.getEatTable(getClass().getSimpleName(), prey.getClass().getSimpleName());
+        int chanse = Parameters.getEatTable(getClass().getSimpleName(), prey.getClass().getSimpleName());
         if(chanse == 100){
             eat(prey);
             return;
@@ -58,10 +57,9 @@ public abstract class Animal implements Amount, Weight {
 //        eat.dead(); // убиваем еду
 //        вынести в отдельный метод тогда можно переопределить растения и животных
 
-        //кто ест
-        double eatWeith = BaseParameters.getEatWeith(getClass().getSimpleName());
+        double eatWeith = Parameters.getParameterDouble("eatWeith",getClass().getSimpleName());
         //кого едят
-        double weight = BaseParameters.getWeight(eat.getClass().getSimpleName());
+        double weight = Parameters.getParameterDouble("weith",getClass().getSimpleName());
 
         double satietyChange = Math.min(weight, eatWeith);
 
@@ -93,15 +91,4 @@ public abstract class Animal implements Amount, Weight {
 
         return this.satiety;
     }
-
-
-//    //размножение
-//    public abstract void reproduction();
-//
-//    //    умереть?
-//    public abstract void dead();
-//
-//    //насыщение - через обращение к таблице
-//    //метод для убывания насыщения
-
 }

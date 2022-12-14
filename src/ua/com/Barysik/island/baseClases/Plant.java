@@ -2,7 +2,7 @@ package ua.com.Barysik.island.baseClases;
 
 public class Plant implements Amount, Weight{
     @Override
-    public int amount() {
+    public double amount() {
         return Amount.super.amount();
     }
 
@@ -14,5 +14,4 @@ public class Plant implements Amount, Weight{
     //рост
     void reproduction() {
     }
-
 }

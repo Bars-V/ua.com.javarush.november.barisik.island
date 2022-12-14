@@ -4,7 +4,7 @@ import ua.com.Barysik.island.animals.Duck;
 import ua.com.Barysik.island.animals.Horse;
 import ua.com.Barysik.island.animals.Wolf;
 import ua.com.Barysik.island.baseClases.Plant;
-import ua.com.Barysik.island.settings.FillTable;
+import ua.com.Barysik.island.utility.FillTable;
 
 public class Fight {
     public static void main(String[] args) {
