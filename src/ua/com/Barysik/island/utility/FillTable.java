@@ -2,6 +2,7 @@ package ua.com.Barysik.island.utility;
 
 import ua.com.Barysik.island.animals.*;
 import ua.com.Barysik.island.baseClases.Plant;
+import ua.com.Barysik.island.settings.Constants;
 import ua.com.Barysik.island.settings.Parameters;
 
 public class FillTable {
@@ -13,44 +14,41 @@ public class FillTable {
     private static String plant = Plant.class.getSimpleName();
 
     public static void startTable() {
+
         fillBaseTable();
         fillEatTable();
     }
 
     private static void fillBaseTable() {
 
-        String weight = "weight"; // weight - Вес одного животного, кг
-        String amount = "amount"; // amount - Максимальное количество животных этого вида на одной клетке
-        String speed = "speed"; // speed - Скорость перемещения, не более чем, клеток за ход
-        String eatWeith = "eatWeith"; // eatWeith - Сколько килограммов пищи нужно животному для полного насыщения
-        String children = "children"; // children - количество детей за раз
 
-        Parameters.setParameterDouble(weight, horse, 60.0);
-        Parameters.setParameterDouble(weight, wolf, 50.0);
-        Parameters.setParameterDouble(weight, caterpillar, 0.01);
-        Parameters.setParameterDouble(weight, duck, 1.0);
-        Parameters.setParameterDouble(weight, plant, 1.0);
 
-        Parameters.setParameter(amount, horse, 20);
-        Parameters.setParameter(amount, wolf, 30);
-        Parameters.setParameter(amount, caterpillar, 1000);
-        Parameters.setParameter(amount, duck, 200);
-        Parameters.setParameter(amount, plant, 200);
+        Parameters.setParameterDouble(Constants.weight, horse, 60.0);
+        Parameters.setParameterDouble(Constants.weight, wolf, 50.0);
+        Parameters.setParameterDouble(Constants.weight, caterpillar, 0.01);
+        Parameters.setParameterDouble(Constants.weight, duck, 1.0);
+        Parameters.setParameterDouble(Constants.weight, plant, 1.0);
 
-        Parameters.setParameter(speed, horse, 4);
-        Parameters.setParameter(speed, wolf, 3);
-        Parameters.setParameter(speed, caterpillar, 0);
-        Parameters.setParameter(speed, duck, 4);
+        Parameters.setParameter(Constants.amount, horse, 20);
+        Parameters.setParameter(Constants.amount, wolf, 30);
+        Parameters.setParameter(Constants.amount, caterpillar, 1000);
+        Parameters.setParameter(Constants.amount, duck, 200);
+        Parameters.setParameter(Constants.amount, plant, 200);
 
-        Parameters.setParameterDouble(eatWeith, horse, 60.0);
-        Parameters.setParameterDouble(eatWeith, wolf, 8.0);
-        Parameters.setParameterDouble(eatWeith, caterpillar, 0.0);
-        Parameters.setParameterDouble(eatWeith, duck, 0.15);
+        Parameters.setParameter(Constants.speed, horse, 4);
+        Parameters.setParameter(Constants.speed, wolf, 3);
+        Parameters.setParameter(Constants.speed, caterpillar, 0);
+        Parameters.setParameter(Constants.speed, duck, 4);
 
-        Parameters.setParameter(children, horse, 2);
-        Parameters.setParameter(children, wolf, 3);
-        Parameters.setParameter(children, caterpillar, 100);
-        Parameters.setParameter(children, horse, 20);
+        Parameters.setParameterDouble(Constants.eatWeith, horse, 60.0);
+        Parameters.setParameterDouble(Constants.eatWeith, wolf, 8.0);
+        Parameters.setParameterDouble(Constants.eatWeith, caterpillar, 0.0);
+        Parameters.setParameterDouble(Constants.eatWeith, duck, 0.15);
+
+        Parameters.setParameter(Constants.children, horse, 2);
+        Parameters.setParameter(Constants.children, wolf, 3);
+        Parameters.setParameter(Constants.children, caterpillar, 100);
+        Parameters.setParameter(Constants.children, horse, 20);
     }
 
     private static void fillEatTable() {

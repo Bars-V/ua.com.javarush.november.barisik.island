@@ -1,18 +1,23 @@
 package ua.com.Barysik.island;
 
-import ua.com.Barysik.island.animals.Duck;
-import ua.com.Barysik.island.animals.Horse;
-import ua.com.Barysik.island.animals.Wolf;
+import ua.com.Barysik.island.animals.*;
 import ua.com.Barysik.island.baseClases.Plant;
-import ua.com.Barysik.island.utility.FillTable;
+import ua.com.Barysik.island.utility.Initialization;
 
 public class Fight {
     public static void main(String[] args) {
 
-        FillTable.startTable();
+        new Initialization().start();
 
         new Horse().hunt(new Plant());
+        System.out.println();
+        new Duck().hunt(new Caterpillar());
+        System.out.println();
+        new Duck().hunt(new Plant());
+        System.out.println();
         new Wolf().hunt(new Duck());
+        System.out.println();
+        new Wolf().hunt(new Caterpillar());
 
     }
 }

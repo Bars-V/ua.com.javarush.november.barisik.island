@@ -11,7 +11,4 @@ public class Plant implements Amount, Weight{
         return Weight.super.weight();
     }
 
-    //рост
-    void reproduction() {
-    }
 }

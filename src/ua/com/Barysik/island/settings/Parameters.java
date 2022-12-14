@@ -36,7 +36,7 @@ public class Parameters {
     }
 
     public static Double getParameterDouble(String parameterName, String className) {
-        return ((double) getEatTable(parameterName, className)) / 1_000_000;
+        return ((double) getParameter(parameterName, className)) / 1_000_000;
     }
 
     public static Integer getEatTable(String hunterClassName, String preyClassName) {

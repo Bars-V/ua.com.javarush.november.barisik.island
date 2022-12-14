@@ -1,5 +1,6 @@
 package ua.com.Barysik.island.baseClases;
 
+import ua.com.Barysik.island.settings.Constants;
 import ua.com.Barysik.island.settings.Parameters;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,7 +17,7 @@ public abstract class Animal implements Amount, Weight {
 
         int index = 5; //количество направлений
 
-        for (int i = 0; i < Parameters.getParameter("speed", getClass().getSimpleName()); i++) {
+        for (int i = 0; i < Parameters.getParameter(Constants.speed, getClass().getSimpleName()); i++) {
 
             int selection = chooseDirection(index);
 
@@ -35,19 +36,25 @@ public abstract class Animal implements Amount, Weight {
         }
     }
 
-    public <T> void hunt(T prey) {
+    public <T> boolean hunt(T prey) {
+        boolean completed;
         int chanse = Parameters.getEatTable(getClass().getSimpleName(), prey.getClass().getSimpleName());
         if(chanse == 100){
             eat(prey);
-            return;
+            return true;
         }
         if(chanse == 0){
-            System.out.println(prey.getClass().getSimpleName() + " не еда для " + getClass().getSimpleName());
+            System.out.println(getClass().getSimpleName() + " не ест " + prey.getClass().getSimpleName());
+            return false;
         }
         int rnd = chooseDirection(100)+1;
         if (chanse >= rnd){
             eat(prey);
+        } else {
+            System.out.println(prey.getClass().getSimpleName() + " убежал от " + getClass().getSimpleName());
+            return false;
         }
+        return false;
     }
 
 
@@ -57,9 +64,8 @@ public abstract class Animal implements Amount, Weight {
 //        eat.dead(); // убиваем еду
 //        вынести в отдельный метод тогда можно переопределить растения и животных
 
-        double eatWeith = Parameters.getParameterDouble("eatWeith",getClass().getSimpleName());
-        //кого едят
-        double weight = Parameters.getParameterDouble("weith",getClass().getSimpleName());
+        double eatWeith = Parameters.getParameterDouble(Constants.eatWeith,getClass().getSimpleName());
+        double weight = Parameters.getParameterDouble(Constants.weight,eat.getClass().getSimpleName());
 
         double satietyChange = Math.min(weight, eatWeith);
 
@@ -74,8 +80,6 @@ public abstract class Animal implements Amount, Weight {
     private double satiety = 100;
 
     private double satiety(double change) {
-
-//        double satiety = this.satiety;
 
         this.satiety = this.satiety + change;
 
