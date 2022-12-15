@@ -16,7 +16,7 @@ public class Initialization {
         System.out.println("Введите размер острова по вертикали");
         int coordinateY = new Scanner(System.in).nextInt();
 
-        Land.newLand(coordinateX, coordinateY);
+//        Land.newLand(coordinateX, coordinateY);
 
     }
 
