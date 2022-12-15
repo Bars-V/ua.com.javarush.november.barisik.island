@@ -1,6 +1,6 @@
 package ua.com.Barysik.island.baseClases;
 
-public class Plant implements Amount, Weight{
+public class Plant extends Alive implements Amount, Weight{
     @Override
     public double amount() {
         return Amount.super.amount();

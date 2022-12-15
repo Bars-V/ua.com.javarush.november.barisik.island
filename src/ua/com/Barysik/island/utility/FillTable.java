@@ -12,6 +12,7 @@ public class FillTable {
     private static String horse = Horse.class.getSimpleName();
     private static String caterpillar = Caterpillar.class.getSimpleName();
     private static String plant = Plant.class.getSimpleName();
+    private static String predatoryBush = PredatoryBush.class.getSimpleName();
 
     public static void startTable() {
 
@@ -28,12 +29,14 @@ public class FillTable {
         Parameters.setParameterDouble(Constants.weight, caterpillar, 0.01);
         Parameters.setParameterDouble(Constants.weight, duck, 1.0);
         Parameters.setParameterDouble(Constants.weight, plant, 1.0);
+        Parameters.setParameterDouble(Constants.weight, predatoryBush, 10.0);
 
         Parameters.setParameter(Constants.amount, horse, 20);
         Parameters.setParameter(Constants.amount, wolf, 30);
         Parameters.setParameter(Constants.amount, caterpillar, 1000);
         Parameters.setParameter(Constants.amount, duck, 200);
         Parameters.setParameter(Constants.amount, plant, 200);
+        Parameters.setParameter(Constants.amount, predatoryBush, 5);
 
         Parameters.setParameter(Constants.speed, horse, 4);
         Parameters.setParameter(Constants.speed, wolf, 3);
@@ -44,11 +47,25 @@ public class FillTable {
         Parameters.setParameterDouble(Constants.eatWeith, wolf, 8.0);
         Parameters.setParameterDouble(Constants.eatWeith, caterpillar, 0.0);
         Parameters.setParameterDouble(Constants.eatWeith, duck, 0.15);
+        Parameters.setParameterDouble(Constants.eatWeith, predatoryBush, 3.5);
 
         Parameters.setParameter(Constants.children, horse, 2);
         Parameters.setParameter(Constants.children, wolf, 3);
         Parameters.setParameter(Constants.children, caterpillar, 100);
-        Parameters.setParameter(Constants.children, horse, 20);
+        Parameters.setParameter(Constants.children, duck, 20);
+
+        Parameters.setParameterDouble(Constants.satiety, horse, 120.0);
+        Parameters.setParameterDouble(Constants.satiety, wolf, 16.0);
+        Parameters.setParameterDouble(Constants.satiety, caterpillar, 1.0);
+        Parameters.setParameterDouble(Constants.satiety, duck, 0.5);
+        Parameters.setParameterDouble(Constants.satiety, predatoryBush, 5.0);
+
+        Parameters.setWords(Constants.name, horse, "Лошадь");
+        Parameters.setWords(Constants.name, wolf, "Волк");
+        Parameters.setWords(Constants.name, caterpillar, "Гусеница");
+        Parameters.setWords(Constants.name, duck, "Утка");
+        Parameters.setWords(Constants.name, predatoryBush, "Плотоядный куст");
+
     }
 
     private static void fillEatTable() {
@@ -62,5 +79,10 @@ public class FillTable {
         Parameters.setEatTable(duck, caterpillar, 100);
 
         Parameters.setEatTable(caterpillar, plant, 100);
+
+        Parameters.setEatTable(predatoryBush, wolf, 20);
+        Parameters.setEatTable(predatoryBush, horse, 70);
+        Parameters.setEatTable(predatoryBush, caterpillar, 100);
+        Parameters.setEatTable(predatoryBush, duck, 10);
     }
 }

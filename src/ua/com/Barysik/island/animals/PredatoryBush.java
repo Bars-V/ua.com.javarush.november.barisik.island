@@ -1,40 +1,14 @@
-package ua.com.Barysik.island.baseClases;
+package ua.com.Barysik.island.animals;
 
+import ua.com.Barysik.island.baseClases.*;
 import ua.com.Barysik.island.settings.Constants;
 import ua.com.Barysik.island.settings.Parameters;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Animal extends Alive implements Amount, Weight {
+public class PredatoryBush extends Alive {
 
-    // выбрать направление движения
-    private int chooseDirection(int i) {
-        return ThreadLocalRandom.current().nextInt(i);
-    }
-
-    //    двигаться
-    public void run() {
-
-        int index = 5; //количество направлений
-
-        for (int i = 0; i < Parameters.getParameter(Constants.speed, getClass().getSimpleName()); i++) {
-
-            int selection = chooseDirection(index);
-
-//          Временная затычка
-            if (selection == 0) {
-                System.out.println("Идем налево");
-            } else if (selection == 1) {
-                System.out.println("Идем направо");
-            } else if (selection == 2) {
-                System.out.println("Идем вверх");
-            } else if (selection == 3) {
-                System.out.println("Идем вниз");
-            } else if (selection == 4) {
-                System.out.println("Остаемся на месте");
-            }
-        }
-    }
+    private String name = Parameters.getWords(Constants.name,getClass().getSimpleName());
 
     public <T> boolean hunt(T prey) {
         boolean completed;
@@ -47,11 +21,11 @@ public abstract class Animal extends Alive implements Amount, Weight {
             System.out.println(getClass().getSimpleName() + " не ест " + prey.getClass().getSimpleName());
             return false;
         }
-        int rnd = chooseDirection(100)+1;
+        int rnd = ThreadLocalRandom.current().nextInt((100)+1);
         if (chanse >= rnd){
             eat(prey);
         } else {
-            System.out.println(prey.getClass().getSimpleName() + " убежал от " + getClass().getSimpleName());
+            System.out.println(prey.getClass().getSimpleName() + " убежал от " + name);
             return false;
         }
         return false;
@@ -73,8 +47,9 @@ public abstract class Animal extends Alive implements Amount, Weight {
 
         //for test
 //        System.out.println(satietyChange);
-        System.out.println(getClass().getSimpleName() + " съел " + eat.getClass().getSimpleName());
+        System.out.println(name + " съел " + eat.getClass().getSimpleName());
     }
+
 
     //сытость
     private double satiety = Parameters.getParameterDouble(Constants.satiety,getClass().getSimpleName());
@@ -97,9 +72,9 @@ public abstract class Animal extends Alive implements Amount, Weight {
 
         if (this.satiety <= 0) {
             // объект умирает
-            System.out.println(getClass().getSimpleName() + " is dead :(");
+            System.out.println(name + " is dead :(");
         }
-        System.out.println(getClass().getSimpleName() + " насытился на  " + change);
+//        System.out.println(name + " насытился на  " + change);
 
         return this.satiety;
     }

@@ -4,17 +4,18 @@ import java.util.HashMap;
 
 public class Parameters {
 
-    private static HashMap<String, HashMap<String, Integer>> parameters = new HashMap<>();
+    private static HashMap<String, HashMap<String, Integer>> digital = new HashMap<>();
+    private static HashMap<String, HashMap<String, String>> words = new HashMap<>();
 
     public static void setParameter(String parameterName, String className, Integer value) {
 
         HashMap<String, Integer> hashMap = new HashMap<>();
 
-        if (parameters.containsKey(parameterName)) {
-            hashMap = parameters.get(parameterName);
+        if (digital.containsKey(parameterName)) {
+            hashMap = digital.get(parameterName);
         }
         hashMap.put(className, value);
-        parameters.put(parameterName, hashMap);
+        digital.put(parameterName, hashMap);
     }
 
     public static void setParameterDouble(String parameterName, String className, Double value) {
@@ -26,13 +27,23 @@ public class Parameters {
         setParameter(hunterClassName, preyClassName, chance);
     }
 
+    public static void setWords(String parameterName, String className, String word) {
+        HashMap<String, String> hashMap = new HashMap<>();
+
+        if (words.containsKey(parameterName)) {
+            hashMap = words.get(parameterName);
+        }
+        hashMap.put(className, word);
+        words.put(parameterName, hashMap);
+    }
+
     public static Integer getParameter(String parameterName, String className) {
-        if (parameters.get(parameterName) == null) {
+        if (digital.get(parameterName) == null) {
             return 0;
-        } else if (parameters.get(parameterName).get(className) == null) {
+        } else if (digital.get(parameterName).get(className) == null) {
             return 0;
         }
-        return parameters.get(parameterName).get(className);
+        return digital.get(parameterName).get(className);
     }
 
     public static Double getParameterDouble(String parameterName, String className) {
@@ -41,5 +52,14 @@ public class Parameters {
 
     public static Integer getEatTable(String hunterClassName, String preyClassName) {
         return getParameter(hunterClassName, preyClassName);
+    }
+
+    public static String getWords(String parameterName, String className) {
+        if (words.get(parameterName) == null) {
+            return "";
+        } else if (words.get(parameterName).get(className) == null) {
+            return "";
+        }
+        return words.get(parameterName).get(className);
     }
 }
