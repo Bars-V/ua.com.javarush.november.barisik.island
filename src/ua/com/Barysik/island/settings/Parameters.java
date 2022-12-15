@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class Parameters {
 
     private static HashMap<String, HashMap<String, Integer>> digital = new HashMap<>();
+    private static HashMap<String, HashMap<String, Double>> extendetDigital = new HashMap<>();
     private static HashMap<String, HashMap<String, String>> words = new HashMap<>();
 
     public static void setParameter(String parameterName, String className, Integer value) {
@@ -14,13 +15,20 @@ public class Parameters {
         if (digital.containsKey(parameterName)) {
             hashMap = digital.get(parameterName);
         }
+
         hashMap.put(className, value);
         digital.put(parameterName, hashMap);
     }
 
     public static void setParameterDouble(String parameterName, String className, Double value) {
-        int valueInteger = (int) (value * 1_000_000);
-        setParameter(parameterName, className, valueInteger);
+
+        HashMap<String, Double> hashMap = new HashMap<>();
+
+        if (extendetDigital.containsKey(parameterName)) {
+            hashMap = extendetDigital.get(parameterName);
+        }
+        hashMap.put(className, value);
+        extendetDigital.put(parameterName, hashMap);
     }
 
     public static void setEatTable(String hunterClassName, String preyClassName, Integer chance) {
@@ -28,6 +36,7 @@ public class Parameters {
     }
 
     public static void setWords(String parameterName, String className, String word) {
+
         HashMap<String, String> hashMap = new HashMap<>();
 
         if (words.containsKey(parameterName)) {
@@ -47,7 +56,12 @@ public class Parameters {
     }
 
     public static Double getParameterDouble(String parameterName, String className) {
-        return ((double) getParameter(parameterName, className)) / 1_000_000;
+        if (extendetDigital.get(parameterName) == null) {
+            return 0.0;
+        } else if (extendetDigital.get(parameterName).get(className) == null) {
+            return 0.0;
+        }
+        return extendetDigital.get(parameterName).get(className);
     }
 
     public static Integer getEatTable(String hunterClassName, String preyClassName) {

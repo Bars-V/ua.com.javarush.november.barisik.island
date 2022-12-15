@@ -1,7 +1,7 @@
 package ua.com.Barysik.island.settings;
 
 import ua.com.Barysik.island.baseClases.Alive;
-import ua.com.Barysik.island.baseClases.Animal;
+import ua.com.Barysik.island.utility.Animal;
 
 import java.util.HashSet;
 

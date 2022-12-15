@@ -9,5 +9,6 @@ public class Constants {
     public static final String children = "children"; // children - количество детей за раз
     public static final String satiety = "satiety"; // satiety - максимальная сытость для класса
     public static final String name = "name"; // name - имя класса
+    public static final String hunger = "hunger"; // hunger - на какой процент убывает сытость у класса в каждом такте
 
 }
