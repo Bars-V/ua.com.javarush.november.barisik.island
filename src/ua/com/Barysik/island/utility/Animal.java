@@ -8,15 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Animal extends Alive {
 
     //Поля класса
-    private final String name = Parameters.getWords(Constants.name, getClass().getSimpleName());
     private final double maxSatiety = Parameters.getParameterDouble(Constants.satiety, getClass().getSimpleName());
     private double currentSatiety = maxSatiety;
     private final double hunger = maxSatiety * Parameters.getParameterDouble(Constants.hunger, getClass().getSimpleName()) / 100;
     private final double eatWeith = Parameters.getParameterDouble(Constants.eatWeith, getClass().getSimpleName());
-
-    public String getName() {
-        return name;
-    }
 
     public double getCurrentSatiety() {
         return currentSatiety;
