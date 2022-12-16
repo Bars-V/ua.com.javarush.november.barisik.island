@@ -13,15 +13,22 @@ public class Land {
     private static final HashMap<Long, HashSet<Alive>> islandCell = new HashMap<>();
 
     public static void newLand(int x, int y) {
+        if (Land.x == -1 || Land.y == -1) {
+            Land.x = -100;
+        }
+
         if (Land.x >= 0 && Land.y >= 0) {
             System.out.printf("Остров размером %d на %d создан ранее.%n", Land.x, Land.y);
             return;
         }
         if (correctCell(x, y)) {
+            Land.x = -1;
             return;
         }
+
         Land.x = x;
         Land.y = y;
+
         System.out.printf("Остров размером %d на %d создан.%n", Land.x, Land.y);
     }
 
@@ -42,10 +49,12 @@ public class Land {
             System.out.println("Принимаются только положительные числа");
             return true;
         }
+
+        if (Land.x == -100 || Land.y == -1) {
+            return false;
+        }
+
         if (x > Land.x || y > Land.y) {
-//            if (Land.x == -1 || Land.y == -1) {
-//                return false;
-//            }
             System.out.println("Ячейка не существует");
             return true;
         }
@@ -146,7 +155,7 @@ public class Land {
                 if (statistics.containsKey(name)) {
                     Integer i = statistics.get(name) + 1;
                     statistics.put(name, i);
-                }else {
+                } else {
                     statistics.put(name, 1);
                 }
             }
