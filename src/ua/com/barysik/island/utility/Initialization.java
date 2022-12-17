@@ -4,6 +4,7 @@ import ua.com.barysik.island.animals.*;
 import ua.com.barysik.island.baseClases.*;
 import ua.com.barysik.island.settings.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -49,13 +50,16 @@ public class Initialization {
             int probability = ThreadLocalRandom.current().nextInt(amount);
 
             for (int i = 0; i < probability; i++) {
+
                 try {
-                    Land.add(x, y, aClass.newInstance());
-                } catch (InstantiationException e) {
+
+                    Land.add(x, y, aClass.getDeclaredConstructor().newInstance());
+
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    System.out.println("Object " + aClass.getSimpleName() + " create error in cell: " + x + " " + y);
                 }
+
             }
         }
     }
