@@ -1,6 +1,6 @@
-package ua.com.Barysik.island.settings;
+package ua.com.barysik.island.settings;
 
-import ua.com.Barysik.island.baseClases.Alive;
+import ua.com.barysik.island.baseClases.Alive;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class Land {
         return false;
     }
 
-    private static void setCell(int x, int y, HashSet<Alive> hashSet) {
+    private static void setCellHashSet(int x, int y, HashSet<Alive> hashSet) {
 //        if (correctCell(x, y)) {
 //            System.out.println("Не удалось записать информацию в ячейку");
 //            return;
@@ -85,7 +85,7 @@ public class Land {
         }
         HashSet<Alive> cell = getCellHashSet(x, y);
         boolean status = cell.add(alive);
-        setCell(x, y, cell);
+        setCellHashSet(x, y, cell);
         return status;
     }
 
@@ -105,7 +105,7 @@ public class Land {
         }
         HashSet<Alive> cell = getCellHashSet(x, y);
         boolean status = cell.remove(alive);
-        setCell(x, y, cell);
+        setCellHashSet(x, y, cell);
         return status;
     }
 
@@ -146,17 +146,17 @@ public class Land {
     }
 
     //Сколько всех на острове
-    public static HashMap<String, Integer> gelStatistics() {
-        HashMap<String, Integer> statistics = new HashMap<>();
+    public static HashMap<String, Long> gelStatistics() {
+        HashMap<String, Long> statistics = new HashMap<>();
         Collection<HashSet<Alive>> values = islandCell.values();
         for (HashSet<Alive> hashSet : values) {
             for (Alive alive : hashSet) {
                 String name = alive.getName();
                 if (statistics.containsKey(name)) {
-                    Integer i = statistics.get(name) + 1;
+                    Long i = statistics.get(name) + 1;
                     statistics.put(name, i);
                 } else {
-                    statistics.put(name, 1);
+                    statistics.put(name, 1L);
                 }
             }
         }

@@ -1,9 +1,9 @@
-package ua.com.Barysik.island.utility;
+package ua.com.barysik.island.utility;
 
-import ua.com.Barysik.island.animals.*;
-import ua.com.Barysik.island.baseClases.Plant;
-import ua.com.Barysik.island.settings.Constants;
-import ua.com.Barysik.island.settings.Parameters;
+import ua.com.barysik.island.animals.*;
+import ua.com.barysik.island.baseClases.Plant;
+import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Parameters;
 
 public class FillTable {
 

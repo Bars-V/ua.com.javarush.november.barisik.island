@@ -1,7 +1,7 @@
-package ua.com.Barysik.island.baseClases;
+package ua.com.barysik.island.baseClases;
 
-import ua.com.Barysik.island.settings.Constants;
-import ua.com.Barysik.island.settings.Parameters;
+import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Parameters;
 
 public abstract class Alive {
 

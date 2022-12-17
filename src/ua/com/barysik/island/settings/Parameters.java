@@ -1,4 +1,4 @@
-package ua.com.Barysik.island.settings;
+package ua.com.barysik.island.settings;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
-package ua.com.Barysik.island.utility;
+package ua.com.barysik.island.utility;
 
-import ua.com.Barysik.island.baseClases.Alive;
-import ua.com.Barysik.island.settings.*;
+import ua.com.barysik.island.baseClases.Alive;
+import ua.com.barysik.island.settings.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
