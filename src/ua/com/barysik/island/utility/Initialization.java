@@ -1,14 +1,10 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.animals.Caterpillar;
-import ua.com.barysik.island.animals.Duck;
-import ua.com.barysik.island.animals.Horse;
-import ua.com.barysik.island.animals.Wolf;
-import ua.com.barysik.island.baseClases.Plant;
-import ua.com.barysik.island.settings.Constants;
-import ua.com.barysik.island.settings.Land;
-import ua.com.barysik.island.settings.Parameters;
+import ua.com.barysik.island.animals.*;
+import ua.com.barysik.island.baseClases.*;
+import ua.com.barysik.island.settings.*;
 
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -24,47 +20,43 @@ public class Initialization {
         System.out.println("Введите размер острова по вертикали");
         int coordinateY = new Scanner(System.in).nextInt();
 
-//        Land.newLand(coordinateX, coordinateY);
-//        Land.newLand(10, 10);
-
-//        заполнение ячеек животными
+        Land.newLand(coordinateX, coordinateY);
 
         for (int i = 0; i < coordinateX; i++) {
             for (int j = 0; j < coordinateY; j++) {
-                insetAnimal(i, j);
-                System.out.println(cellcalc);
+                fillingCell(i, j);
+                System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }
-
-
     }
 
     private static int cellcalc = 0;
 
-    private void insetAnimal(int x, int y) {
+    private void fillingCell(int x, int y) {
 
-        int w = ThreadLocalRandom.current().nextInt(Parameters.getParameter(Constants.amount, Wolf.class.getSimpleName()));
-        int h = ThreadLocalRandom.current().nextInt(Parameters.getParameter(Constants.amount, Horse.class.getSimpleName()));
-        int d = ThreadLocalRandom.current().nextInt(Parameters.getParameter(Constants.amount, Duck.class.getSimpleName()));
-        int c = ThreadLocalRandom.current().nextInt(Parameters.getParameter(Constants.amount, Caterpillar.class.getSimpleName()));
-        int p = ThreadLocalRandom.current().nextInt(Parameters.getParameter(Constants.amount, Plant.class.getSimpleName()));
+        HashSet<Class<? extends Alive>> aliveClass = new HashSet<>();
 
-        for (int i = 0; i < w / 2; i++) {
-            Land.add(x, y, new Wolf());
+        aliveClass.add(Wolf.class);
+        aliveClass.add(Horse.class);
+        aliveClass.add(Duck.class);
+        aliveClass.add(Caterpillar.class);
+        aliveClass.add(Plant.class);
+        aliveClass.add(Bush.CarnivorousBush.class);
+
+        for (Class<? extends Alive> aClass : aliveClass) {
+
+            int amount = Parameters.getParameter(Constants.amount, aClass.getSimpleName());
+            int probability = ThreadLocalRandom.current().nextInt(amount);
+
+            for (int i = 0; i < probability; i++) {
+                try {
+                    Land.add(x, y, aClass.newInstance());
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        for (int i = 0; i < h / 2; i++) {
-            Land.add(x, y, new Horse());
-        }
-        for (int i = 0; i < d / 2; i++) {
-            Land.add(x, y, new Duck());
-        }
-        for (int i = 0; i < c / 2; i++) {
-            Land.add(x, y, new Caterpillar());
-        }
-        for (int i = 0; i < p / 2; i++) {
-            Land.add(x, y, new Plant());
-        }
-        cellcalc++;
     }
-
 }
