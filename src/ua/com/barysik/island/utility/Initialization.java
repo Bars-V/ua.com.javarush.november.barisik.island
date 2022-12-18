@@ -11,6 +11,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Initialization {
 
+    public static Land land;
+
     public void start() {
 
         FillTable.startTable();
@@ -21,7 +23,16 @@ public class Initialization {
         System.out.println("Введите размер острова по вертикали");
         int coordinateY = new Scanner(System.in).nextInt();
 
-        Land.newLand(coordinateX, coordinateY);
+        if (coordinateX > 10_000_000 || coordinateY > 10_000_000) {
+            System.out.println("Остров не может быть больше 10_000_000 в ширину или в длину");
+            return;
+        }
+        if (coordinateX < 0 || coordinateY < 0) {
+            System.out.println("Принимаются только положительные числа");
+            return;
+        }
+        land = new Land(coordinateX, coordinateY);
+
 
         for (int i = 0; i < coordinateX; i++) {
             for (int j = 0; j < coordinateY; j++) {
@@ -53,7 +64,7 @@ public class Initialization {
 
                 try {
 
-                    Land.add(x, y, aClass.getDeclaredConstructor().newInstance());
+                    land.add(x, y, aClass.getDeclaredConstructor().newInstance());
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
