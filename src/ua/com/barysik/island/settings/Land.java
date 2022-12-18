@@ -73,7 +73,7 @@ public class Land {
         return status;
     }
 
-    private HashSet<Alive> getCellHashSet(int x, int y) {
+    public HashSet<Alive> getCellHashSet(int x, int y) {
         long index = x * 1_00_000_000L + y;
         if (islandCell.get(index) == null) {
             return new HashSet<>();
@@ -81,7 +81,7 @@ public class Land {
         return islandCell.get(index);
     }
 
-    public Integer getAliveCell(int x, int y, Alive alive) {
+    public Integer getAmountAliveInCell(int x, int y, Alive alive) {
         int i = 0;
         correctCell(x, y);
         HashSet<Alive> cell = getCellHashSet(x, y);
