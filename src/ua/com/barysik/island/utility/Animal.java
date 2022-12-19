@@ -96,8 +96,8 @@ public abstract class Animal extends Alive {
             this.currentSatiety = maxSatiety;
         }
 
-        if (this.currentSatiety <= 0) {
-            this.currentSatiety = 0;
+        if (this.currentSatiety < 0) {
+            this.currentSatiety = -1;
         }
 
 //        System.out.println(getClass().getSimpleName() + " насытился/проголодался на  " + change);

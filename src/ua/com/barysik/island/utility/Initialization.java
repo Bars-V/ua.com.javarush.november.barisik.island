@@ -31,8 +31,8 @@ public class Initialization {
 //            System.out.println("Принимаются только положительные числа");
 //            return;
 //        }
-        int coordinateX = 1;
-        int coordinateY = 1;
+        int coordinateX = 2;
+        int coordinateY = 2;
 
 
         land = new Land(coordinateX, coordinateY);
@@ -44,6 +44,12 @@ public class Initialization {
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }
+
+        //test
+        new Thread(new Cell(0,0)).start();
+        new Thread(new Cell(0,1)).start();
+        new Thread(new Cell(1,0)).start();
+        new Thread(new Cell(1,1)).start();
     }
 
     private static int cellcalc = 0;
@@ -57,7 +63,7 @@ public class Initialization {
         aliveClass.add(Duck.class);
         aliveClass.add(Caterpillar.class);
         aliveClass.add(Plant.class);
-//        aliveClass.add(Bush.CarnivorousBush.class);
+        aliveClass.add(Bush.CarnivorousBush.class);
 
         for (Class<? extends Alive> aClass : aliveClass) {
 

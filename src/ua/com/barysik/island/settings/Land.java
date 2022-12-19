@@ -117,7 +117,7 @@ public class Land {
         return statistics;
     }
 
-    public HashMap<String, Long> gelCellStatistics(int x, int y) {
+    public HashMap<String, Long> getCellStatistics(int x, int y) {
         if (correctCell(x, y)) {
             System.out.println("Coordinate error");
             return new HashMap<>();
@@ -126,7 +126,7 @@ public class Land {
     }
 
 
-    public HashMap<String, Long> gelIslandStatistics() {
+    public HashMap<String, Long> getIslandStatistics() {
         HashMap<String, Long> statistics = new HashMap<>();
         Collection<HashSet<Alive>> values = islandCell.values();
         for (HashSet<Alive> hashSet : values) {

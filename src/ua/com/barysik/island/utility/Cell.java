@@ -1,5 +1,6 @@
 package ua.com.barysik.island.utility;
 
+import ua.com.barysik.island.animals.Caterpillar;
 import ua.com.barysik.island.baseClases.Alive;
 import ua.com.barysik.island.baseClases.Plant;
 import ua.com.barysik.island.settings.Constants;
@@ -7,7 +8,7 @@ import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 //public class Action extends Thread {
 public class Cell extends Thread {
@@ -30,13 +31,14 @@ public class Cell extends Thread {
 
     @Override
     public void run() {
+//        while (true) {
         while (!isInterrupted()) {
             starvation(Initialization.land.getCellArrayList(this.x, this.y));
             find(Initialization.land.getCellArrayList(this.x, this.y));
             //решили уйти
             //смогли уйти
-            //генерация травы
-            System.out.println(Initialization.land.gelIslandStatistics());
+            reproduce(new Plant());
+            System.out.println(Initialization.land.getCellStatistics(this.x, this.y));
         }
     }
 
@@ -90,14 +92,11 @@ public class Cell extends Thread {
         double currentSatiety = ((Animal) hunter).getCurrentSatiety();
         ((Animal) hunter).hunt(prey);
         if (currentSatiety != ((Animal) hunter).getCurrentSatiety()) {
+//            System.out.println(hunter + " съел " + prey);
             Initialization.land.remove(this.x, this.y, prey);
-//            System.out.println(hunter.getName() + " съел " + prey.getName());
-        } else {
-//            System.out.println(hunter.getName() + " не поймал " + prey.getName());
+        } else if(hunter instanceof Caterpillar && prey instanceof Plant){
+            Initialization.land.remove(this.x, this.y, prey);
         }
-        //А если сытость не поменялась??????
-        //гусениц обошли стороной
-        //возможно переменная нужна поел / не поел
     }
 
     private void starvation(ArrayList<Alive> alives) {
@@ -106,7 +105,7 @@ public class Cell extends Thread {
                 continue;
             }
             if (((Animal) alive).getCurrentSatiety() < 0.001) {
-//                System.out.println("satyety " + alive.getClass().getSimpleName()+ " = " + ((Animal) alive).getCurrentSatiety());
+//                System.out.println("satyety " + alive.getClass().getSimpleName() + " = " + ((Animal) alive).getCurrentSatiety());
                 Initialization.land.remove(this.x, this.y, alive);
 //                System.out.println(alive.getName() + " умер от голода");
             }
@@ -114,11 +113,18 @@ public class Cell extends Thread {
     }
 
     private void reproduce(Alive alive) {
-
-        for (int i = 0; i < Parameters.getParameter(Constants.children, alive.getClass().getSimpleName()); i++) {
+        int countNewAlives = 0;
+        if (Parameters.getParameter(Constants.children, alive.getClass().getSimpleName()) != 0) {
+            countNewAlives = Parameters.getParameter(Constants.children, alive.getClass().getSimpleName()) / 2;
+        } else {
+            int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
+            int currentAmount = Initialization.land.getAmountAliveInCell(this.x, this.y, alive);
+            countNewAlives = ThreadLocalRandom.current().nextInt(maxAmount - currentAmount) / 2;
+        }
+        for (int i = 0; i < countNewAlives; i++) {
             try {
                 if (Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName()) > Initialization.land.getAmountAliveInCell(this.x, this.y, alive)) {
-                    boolean add = Initialization.land.add(this.x, this.y, alive.getClass().getDeclaredConstructor().newInstance());
+                    Initialization.land.add(this.x, this.y, alive.getClass().getDeclaredConstructor().newInstance());
                 }
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
