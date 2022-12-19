@@ -1,7 +1,6 @@
 package ua.com.barysik.island.settings;
 
 import ua.com.barysik.island.baseClases.Alive;
-import ua.com.barysik.island.utility.Initialization;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +11,7 @@ public class Land {
 
     private final int x;
     private final int y;
-    private final HashMap<Long, HashSet<Alive>> islandCell = new HashMap<>();
+    private final HashMap<Long, ArrayList<Alive>> islandCell = new HashMap<>();
 
     public Land(int x, int y) {
         this.x = x;
@@ -45,22 +44,22 @@ public class Land {
         return false;
     }
 
-    private void setCellHashSet(int x, int y, HashSet<Alive> hashSet) {
+    private void setCell(int x, int y, ArrayList<Alive> list) {
         if (correctCell(x, y)) {
             System.out.println("Не удалось записать информацию в ячейку");
             return;
         }
         long index = x * 1_00_000_000L + y;
-        islandCell.put(index, hashSet);
+        islandCell.put(index, list);
     }
 
     public boolean add(int x, int y, Alive alive) {
         if (correctCell(x, y)) {
             return false;
         }
-        HashSet<Alive> cell = getCellHashSet(x, y);
+        ArrayList<Alive> cell = getCell(x, y);
         boolean status = cell.add(alive);
-        setCellHashSet(x, y, cell);
+        setCell(x, y, cell);
         return status;
     }
 
@@ -69,24 +68,24 @@ public class Land {
         if (correctCell(x, y)) {
             return false;
         }
-        HashSet<Alive> cell = getCellHashSet(x, y);
+        ArrayList<Alive> cell = getCell(x, y);
         boolean status = cell.remove(alive);
-        setCellHashSet(x, y, cell);
+        setCell(x, y, cell);
         return status;
     }
 
-    public HashSet<Alive> getCellHashSet(int x, int y) {
+    private ArrayList<Alive> getCell(int x, int y) {
         long index = x * 1_00_000_000L + y;
         if (islandCell.get(index) == null) {
-            return new HashSet<>();
+            return new ArrayList<Alive>();
         }
         return islandCell.get(index);
     }
 
     public ArrayList getCellArrayList(int x, int y) {
-        HashSet<Alive> cellHashSet = getCellHashSet(x, y);
+        ArrayList<Alive> list = getCell(x, y);
         ArrayList<Alive> alives = new ArrayList<>();
-        for (Alive alive : cellHashSet) {
+        for (Alive alive : list) {
             alives.add(alive);
         }
         return alives;
@@ -95,7 +94,7 @@ public class Land {
     public Integer getAmountAliveInCell(int x, int y, Alive alive) {
         int i = 0;
         correctCell(x, y);
-        HashSet<Alive> cell = getCellHashSet(x, y);
+        ArrayList<Alive> cell = getCell(x, y);
         for (Alive allAlive : cell) {
             if (allAlive.getClass() == alive.getClass()) {
                 i++;
@@ -117,21 +116,24 @@ public class Land {
         return statistics;
     }
 
-    public HashMap<String, Long> getCellStatistics(int x, int y) {
-        if (correctCell(x, y)) {
-            System.out.println("Coordinate error");
-            return new HashMap<>();
-        }
-        return setToMap(getCellHashSet(x, y), new HashMap<>());
+//    public HashMap<String, Long> getCellStatistics(int x, int y) {
+//        if (correctCell(x, y)) {
+//            System.out.println("Coordinate error");
+//            return new HashMap<>();
+//        }
+//        return setToMap(getCell(x, y), new HashMap<>());
+//    }
+
+    public Collection<ArrayList<Alive>> getAll(){
+        return islandCell.values();
     }
 
-
-    public HashMap<String, Long> getIslandStatistics() {
-        HashMap<String, Long> statistics = new HashMap<>();
-        Collection<HashSet<Alive>> values = islandCell.values();
-        for (HashSet<Alive> hashSet : values) {
-            setToMap(hashSet, statistics);
-        }
-        return statistics;
-    }
+//    public HashMap<String, Long> getIslandStatistics() {
+//        HashMap<String, Long> statistics = new HashMap<>();
+//        Collection<HashSet<Alive>> values = islandCell.values();
+//        for (HashSet<Alive> hashSet : values) {
+//            setToMap(hashSet, statistics);
+//        }
+//        return statistics;
+//    }
 }

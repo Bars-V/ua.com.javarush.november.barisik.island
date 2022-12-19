@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-//public class Action extends Thread {
 public class Cell extends Thread {
 
     private final int x;
@@ -31,14 +30,13 @@ public class Cell extends Thread {
 
     @Override
     public void run() {
-//        while (true) {
         while (!isInterrupted()) {
             starvation(Initialization.land.getCellArrayList(this.x, this.y));
             find(Initialization.land.getCellArrayList(this.x, this.y));
             //решили уйти
             //смогли уйти
             reproduce(new Plant());
-            System.out.println(Initialization.land.getCellStatistics(this.x, this.y));
+//            System.out.println(Initialization.land.getCellStatistics(this.x, this.y));
         }
     }
 
@@ -47,44 +45,41 @@ public class Cell extends Thread {
         for (int i = 0; i < size; i = i + 2) {
             int next = i + 1;
 
-//            System.out.println("_________________________\n Цикл " + i + "\t" +" cell " + this.x + " " + this.y + "\n_________________________");
-
-            Alive a = alives.get(i);
-            Alive b = null;
+            Alive aliveA = alives.get(i);
+            Alive aliveB = null;
             if (next < size) {
-                b = alives.get(next);
+                aliveB = alives.get(next);
             }
 
-            if (b == null) {
+            if (aliveB == null) {
                 continue;
             }
 
-            if (a instanceof Animal) {
-                ((Animal) a).hunger();
+            if (aliveA instanceof Animal) {
+                ((Animal) aliveA).hunger();
             }
 
-            if (b instanceof Animal) {
-                ((Animal) b).hunger();
+            if (aliveB instanceof Animal) {
+                ((Animal) aliveB).hunger();
             }
 
-            if (a.getClass() == b.getClass() && a instanceof Animal) {
-                reproduce(a);
+            if (aliveA.getClass() == aliveB.getClass() && aliveA instanceof Animal) {
+                reproduce(aliveA);
             }
 
-            if (a instanceof Animal && b instanceof Plant) {
-                hunt(a, b);
+            if (aliveA instanceof Animal && aliveB instanceof Plant) {
+                hunt(aliveA, aliveB);
                 continue;
-            } else if (b instanceof Animal && a instanceof Plant) {
-                hunt(b, a);
+            } else if (aliveB instanceof Animal && aliveA instanceof Plant) {
+                hunt(aliveB, aliveA);
                 continue;
-            } else if (a instanceof Plant || b instanceof Plant) {
+            } else if (aliveA instanceof Plant || aliveB instanceof Plant) {
                 continue;
-            } else if (Parameters.getEatTable(a.getClass().getSimpleName(), b.getClass().getSimpleName()) > 0) {
-                hunt(a, b);
-            } else if (Parameters.getEatTable(b.getClass().getSimpleName(), a.getClass().getSimpleName()) > 0) {
-                hunt(b, a);
+            } else if (Parameters.getEatTable(aliveA.getClass().getSimpleName(), aliveB.getClass().getSimpleName()) > 0) {
+                hunt(aliveA, aliveB);
+            } else if (Parameters.getEatTable(aliveB.getClass().getSimpleName(), aliveA.getClass().getSimpleName()) > 0) {
+                hunt(aliveB, aliveA);
             }
-//            System.out.println("satyety " + a.getClass().getSimpleName()+ " = " + ((Animal) a).getCurrentSatiety());
         }
     }
 

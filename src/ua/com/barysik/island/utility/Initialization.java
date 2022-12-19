@@ -1,12 +1,14 @@
 package ua.com.barysik.island.utility;
 
 import ua.com.barysik.island.animals.*;
-import ua.com.barysik.island.baseClases.*;
-import ua.com.barysik.island.settings.*;
+import ua.com.barysik.island.baseClases.Alive;
+import ua.com.barysik.island.baseClases.Plant;
+import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Land;
+import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Initialization {
@@ -41,15 +43,13 @@ public class Initialization {
         for (int i = 0; i < coordinateX; i++) {
             for (int j = 0; j < coordinateY; j++) {
                 fillingCell(i, j);
+                new Thread(new Cell(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }
 
-        //test
-        new Thread(new Cell(0,0)).start();
-        new Thread(new Cell(0,1)).start();
-        new Thread(new Cell(1,0)).start();
-        new Thread(new Cell(1,1)).start();
+        new Thread(new Statistics()).start();
+
     }
 
     private static int cellcalc = 0;
@@ -71,14 +71,11 @@ public class Initialization {
             int probability = ThreadLocalRandom.current().nextInt(amount);
 
             for (int i = 0; i < probability; i++) {
-
                 try {
-
                     land.add(x, y, aClass.getDeclaredConstructor().newInstance());
-
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
-                    System.out.println("Object " + aClass.getSimpleName() + " create error in cell: " + x + " " + y);
+//                    System.out.println("Object " + aClass.getSimpleName() + " create error in cell: " + x + " " + y);
                 }
             }
         }
