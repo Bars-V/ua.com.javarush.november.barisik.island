@@ -1,7 +1,9 @@
 package ua.com.barysik.island.settings;
 
 import ua.com.barysik.island.baseClases.Alive;
+import ua.com.barysik.island.utility.Initialization;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,6 +81,15 @@ public class Land {
             return new HashSet<>();
         }
         return islandCell.get(index);
+    }
+
+    public ArrayList getCellArrayList(int x, int y) {
+        HashSet<Alive> cellHashSet = getCellHashSet(x, y);
+        ArrayList<Alive> alives = new ArrayList<>();
+        for (Alive alive : cellHashSet) {
+            alives.add(alive);
+        }
+        return alives;
     }
 
     public Integer getAmountAliveInCell(int x, int y, Alive alive) {

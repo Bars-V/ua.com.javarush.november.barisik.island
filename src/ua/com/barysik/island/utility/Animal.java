@@ -55,14 +55,14 @@ public abstract class Animal extends Alive {
             return true;
         }
         if (chanse == 0) {
-            System.out.println(getClass().getSimpleName() + " не ест " + prey.getClass().getSimpleName());
+//            System.out.println(getClass().getSimpleName() + " не ест " + prey.getClass().getSimpleName());
             return false;
         }
         int rnd = chooseDirection(100) + 1;
         if (chanse >= rnd) {
             eat(prey);
         } else {
-            System.out.println(prey.getClass().getSimpleName() + " убежал от " + getClass().getSimpleName());
+//            System.out.println(prey.getClass().getSimpleName() + " убежал от " + getClass().getSimpleName());
             return false;
         }
         return false;
@@ -77,7 +77,7 @@ public abstract class Animal extends Alive {
         double satietyChange = Math.min(weight, this.eatWeith);
 
         //for test
-        System.out.println(getClass().getSimpleName() + " съел " + eat.getClass().getSimpleName());
+//        System.out.println(getClass().getSimpleName() + " съел " + eat.getClass().getSimpleName());
 
         satiety(satietyChange);
     }
