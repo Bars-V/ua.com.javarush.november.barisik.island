@@ -1,8 +1,11 @@
 package ua.com.barysik.island.utility;
 
 import ua.com.barysik.island.baseClases.Alive;
-import ua.com.barysik.island.settings.*;
+import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Directions;
+import ua.com.barysik.island.settings.Parameters;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal extends Alive {
@@ -11,37 +14,43 @@ public abstract class Animal extends Alive {
     private double currentSatiety = maxSatiety;
     private final double hunger = maxSatiety * Parameters.getParameterDouble(Constants.hunger, getClass().getSimpleName()) / 100;
     private final double eatWeith = Parameters.getParameterDouble(Constants.eatWeith, getClass().getSimpleName());
+    private final int speed = Parameters.getParameter(Constants.speed, getClass().getSimpleName());
 
     public double getCurrentSatiety() {
         return currentSatiety;
     }
 
-    private int chooseDirection(int i) {
+    private int rnd(int i) {
         return ThreadLocalRandom.current().nextInt(i);
     }
 
-    public void run() {
+    public ArrayList<Directions> run() {
 
-        int index = 5;
+        ArrayList<Directions> directions = new ArrayList<>();
+        int speed = Parameters.getParameter(Constants.speed, getClass().getSimpleName());
 
-        for (int i = 0; i < Parameters.getParameter(Constants.speed, getClass().getSimpleName()); i++) {
+        for (int i = 0; i < speed; i++) {
 
-            int selection = chooseDirection(index);
-
-//          Временная затычка
-            if (selection == 0) {
-                System.out.println("Идем налево");
-            } else if (selection == 1) {
-                System.out.println("Идем направо");
-            } else if (selection == 2) {
-                System.out.println("Идем вверх");
-            } else if (selection == 3) {
-                System.out.println("Идем вниз");
-            } else if (selection == 4) {
-                System.out.println("Остаемся на месте");
+            switch (rnd(5)) {
+                case 0:
+                    directions.add(Directions.STOP);
+                    continue;
+                case 1:
+                    directions.add(Directions.LEFT);
+                    continue;
+                case 2:
+                    directions.add(Directions.RIGHT);
+                    continue;
+                case 3:
+                    directions.add(Directions.UP);
+                    continue;
+                case 4:
+                    directions.add(Directions.DOWN);
             }
         }
+        return directions;
     }
+
 
     public <T> boolean hunt(T prey) {
         int chanse = Parameters.getEatTable(getClass().getSimpleName(), prey.getClass().getSimpleName());
@@ -52,7 +61,7 @@ public abstract class Animal extends Alive {
         if (chanse == 0) {
             return false;
         }
-        int rnd = chooseDirection(100) + 1;
+        int rnd = rnd(100) + 1;
         if (chanse >= rnd) {
             eat(prey);
         } else {
