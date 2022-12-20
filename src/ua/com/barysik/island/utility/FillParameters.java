@@ -1,11 +1,11 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.animals.*;
-import ua.com.barysik.island.baseClases.Plant;
+import ua.com.barysik.island.entity.animals.*;
+import ua.com.barysik.island.entity.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
-public class FillTable {
+public class FillParameters {
 
     private static String wolf = Wolf.class.getSimpleName();
     private static String duck = Duck.class.getSimpleName();

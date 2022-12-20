@@ -1,9 +1,8 @@
-package ua.com.barysik.island.baseClases;
+package ua.com.barysik.island.entity.animals;
 
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Directions;
 import ua.com.barysik.island.settings.Parameters;
-import ua.com.barysik.island.utility.Animal;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;

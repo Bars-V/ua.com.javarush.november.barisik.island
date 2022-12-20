@@ -1,10 +1,10 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.animals.*;
-import ua.com.barysik.island.baseClases.Alive;
-import ua.com.barysik.island.baseClases.Plant;
+import ua.com.barysik.island.entity.animals.*;
+import ua.com.barysik.island.entity.Alive;
+import ua.com.barysik.island.entity.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
-import ua.com.barysik.island.settings.Land;
+import ua.com.barysik.island.entity.IsLand;
 import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,13 +14,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Initialization {
 
-    public static Land island;
+    public static IsLand island;
 
     private int cellcalc = 0;
 
     public void start() {
 
-        FillTable.startTable();
+        FillParameters.startTable();
 
         System.out.println("Введите размер острова по горизонтали");
         int width = new Scanner(System.in).nextInt();
@@ -41,12 +41,12 @@ public class Initialization {
 //        int width = 2;
 //        int length = 2;
 
-        island = new Land(width, length);
+        island = new IsLand(width, length);
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
                 fillingCell(i, j);
-                new Thread(new Cell(i, j)).start();
+                new Thread(new CellAction(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }

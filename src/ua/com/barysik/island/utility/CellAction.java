@@ -1,7 +1,8 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.baseClases.Alive;
-import ua.com.barysik.island.baseClases.Plant;
+import ua.com.barysik.island.entity.Alive;
+import ua.com.barysik.island.entity.animals.Animal;
+import ua.com.barysik.island.entity.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
@@ -9,12 +10,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Cell extends Thread {
+public class CellAction extends Thread {
 
     private final int width;
     private final int length;
 
-    public Cell(int width, int length) {
+    public CellAction(int width, int length) {
         this.width = width;
         this.length = length;
     }

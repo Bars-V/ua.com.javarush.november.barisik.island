@@ -1,6 +1,6 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.baseClases.Alive;
+import ua.com.barysik.island.entity.Alive;
 
 import java.util.Collection;
 import java.util.HashMap;

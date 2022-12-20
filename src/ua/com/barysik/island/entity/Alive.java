@@ -1,4 +1,4 @@
-package ua.com.barysik.island.baseClases;
+package ua.com.barysik.island.entity;
 
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;

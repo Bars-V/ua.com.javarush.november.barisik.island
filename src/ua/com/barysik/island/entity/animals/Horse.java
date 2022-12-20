@@ -1,6 +1,5 @@
-package ua.com.barysik.island.animals;
+package ua.com.barysik.island.entity.animals;
 
-import ua.com.barysik.island.baseClases.Herbivore;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Directions;
 import ua.com.barysik.island.settings.Parameters;

@@ -1,18 +1,21 @@
-package ua.com.barysik.island.settings;
+package ua.com.barysik.island.entity;
 
-import ua.com.barysik.island.baseClases.Alive;
+import ua.com.barysik.island.entity.Alive;
+import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Parameters;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Land {
+public class IsLand {
 
     private final int width;
     private final int length;
     private final HashMap<Long, CopyOnWriteArrayList<Alive>> islandCell = new HashMap<>();
 
 
-    public Land(int width, int length) {
+    public IsLand(int width, int length) {
         this.width = width;
         this.length = length;
         System.out.printf("An island the size %d to %d created.%n", this.width, this.length);
