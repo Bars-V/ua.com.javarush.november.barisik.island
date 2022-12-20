@@ -1,8 +1,8 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.entity.Alive;
-import ua.com.barysik.island.entity.animals.Animal;
-import ua.com.barysik.island.entity.plants.Plant;
+import ua.com.barysik.island.entities.Alive;
+import ua.com.barysik.island.entities.animals.Animal;
+import ua.com.barysik.island.entities.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
@@ -32,6 +32,7 @@ public class CellAction extends Thread {
     public void run() {
         while (!isInterrupted()) {
             deathByHunger(Initialization.island.getCellList(this.width, this.length));
+            Initialization.island.shuffleCell(this.width, this.length);
             search(Initialization.island.getCellList(this.width, this.length));
             //решили уйти
             //смогли уйти
@@ -39,18 +40,17 @@ public class CellAction extends Thread {
         }
     }
 
-    public void search(CopyOnWriteArrayList<Alive> alives) {
+    public void search(CopyOnWriteArrayList<Alive> alivesList) {
 
-//        Rnd
+//        int size = alivesList.size();
 
-        int size = alives.size();
-        for (int i = 0; i < size; i = i + 2) {
+        for (int i = 0; i < alivesList.size(); i = i + 2) {
             int next = i + 1;
-            Alive aliveOne = alives.get(i);
+            Alive aliveOne = alivesList.get(i);
             Alive aliveTwo = null;
 
-            if (next < size) {
-                aliveTwo = alives.get(next);
+            if (next < alivesList.size()) {
+                aliveTwo = alivesList.get(next);
             }
 
             if (aliveTwo == null) {
@@ -100,21 +100,22 @@ public class CellAction extends Thread {
 
     private void reproduce(Alive alive) {
 
-        int countNewAlives;
+        int countNewAlives = 0;
+        int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
+        int currentAmount = Initialization.island.getAmountAliveInCell(this.width, this.length, alive);
         int children = Parameters.getParameter(Constants.children, alive.getClass().getSimpleName());
 
         if (children != 0) {
             countNewAlives = ThreadLocalRandom.current().nextInt(children) + 1;
-        } else {
-            int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
-            int currentAmount = Initialization.island.getAmountAliveInCell(this.width, this.length, alive);
+        } else if (maxAmount - currentAmount > 0) {
             countNewAlives = ThreadLocalRandom.current().nextInt(maxAmount - currentAmount);
         }
+
         for (int i = 0; i < countNewAlives; i++) {
             try {
                 boolean add = Initialization.island.add(this.width, this.length, alive.getClass().getDeclaredConstructor().newInstance());
                 if (!add) {
-                    return;
+                    break;
                 }
 //                    System.out.println("Родился новый " + alive.getClass().getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

@@ -1,7 +1,7 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.entity.animals.*;
-import ua.com.barysik.island.entity.plants.Plant;
+import ua.com.barysik.island.entities.animals.*;
+import ua.com.barysik.island.entities.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
@@ -54,7 +54,7 @@ public class FillParameters {
 
         Parameters.setParameterDouble(Constants.satiety, horse, 120.0);
         Parameters.setParameterDouble(Constants.satiety, wolf, 16.0);
-        Parameters.setParameterDouble(Constants.satiety, caterpillar, 0.001);
+        Parameters.setParameterDouble(Constants.satiety, caterpillar, 0.01);
         Parameters.setParameterDouble(Constants.satiety, duck, 0.15);
         Parameters.setParameterDouble(Constants.satiety, carnivorousBush, 5.0);
 
@@ -69,7 +69,7 @@ public class FillParameters {
         Parameters.setParameterDouble(Constants.hunger, wolf, 5.0);
         Parameters.setParameterDouble(Constants.hunger, caterpillar, 0.1);
         Parameters.setParameterDouble(Constants.hunger, duck, 30.0);
-        Parameters.setParameterDouble(Constants.hunger, carnivorousBush, 20.0);
+        Parameters.setParameterDouble(Constants.hunger, carnivorousBush, 0.0);
 
     }
 

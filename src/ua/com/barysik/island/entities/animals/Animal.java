@@ -1,6 +1,6 @@
-package ua.com.barysik.island.entity.animals;
+package ua.com.barysik.island.entities.animals;
 
-import ua.com.barysik.island.entity.Alive;
+import ua.com.barysik.island.entities.Alive;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Directions;
 import ua.com.barysik.island.settings.Parameters;

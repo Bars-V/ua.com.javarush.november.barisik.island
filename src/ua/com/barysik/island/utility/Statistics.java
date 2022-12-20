@@ -1,6 +1,6 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.entity.Alive;
+import ua.com.barysik.island.entities.Alive;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,12 +12,6 @@ public class Statistics extends Thread {
     public void run(){
 
         while (true) {
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             HashMap<String, Long> statistics = new HashMap<>();
 
@@ -35,6 +29,13 @@ public class Statistics extends Thread {
                 }
             }
             System.out.println(statistics);
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

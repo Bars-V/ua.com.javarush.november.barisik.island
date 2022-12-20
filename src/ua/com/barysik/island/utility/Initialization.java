@@ -1,10 +1,10 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.entity.animals.*;
-import ua.com.barysik.island.entity.Alive;
-import ua.com.barysik.island.entity.plants.Plant;
+import ua.com.barysik.island.entities.animals.*;
+import ua.com.barysik.island.entities.Alive;
+import ua.com.barysik.island.entities.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
-import ua.com.barysik.island.entity.IsLand;
+import ua.com.barysik.island.entities.IsLand;
 import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
@@ -46,6 +46,7 @@ public class Initialization {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
                 fillingCell(i, j);
+//                new CellAction(i, j);
                 new Thread(new CellAction(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }

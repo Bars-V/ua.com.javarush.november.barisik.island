@@ -1,6 +1,5 @@
-package ua.com.barysik.island.entity;
+package ua.com.barysik.island.entities;
 
-import ua.com.barysik.island.entity.Alive;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
@@ -66,15 +65,13 @@ public class IsLand {
         return statusWrite;
     }
 
-
-    public boolean remove(int width, int length, Alive alive) {
+    public void remove(int width, int length, Alive alive) {
         if (correctCell(width, length)) {
-            return false;
+            return;
         }
         CopyOnWriteArrayList<Alive> cell = getCell(width, length);
-        boolean statusWrite = cell.remove(alive);
+        cell.remove(alive);
         setCell(width, length, cell);
-        return statusWrite;
     }
 
     private CopyOnWriteArrayList<Alive> getCell(int width, int length) {
@@ -85,12 +82,11 @@ public class IsLand {
         return islandCell.get(index);
     }
 
+    public void shuffleCell(int width, int length){
+       setCell(width, length, getCellList(width, length));
+    }
+
     public CopyOnWriteArrayList<Alive> getCellList(int width, int length) {
-//        CopyOnWriteArrayList<Alive> list = getCell(width, length);
-//        CopyOnWriteArrayList<Alive> alives = new CopyOnWriteArrayList<>();
-//        for (Alive alive : list) {
-//            alives.add(alive);
-//        }
         return getCell(width, length);
     }
 
