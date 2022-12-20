@@ -1,129 +1,124 @@
 package ua.com.barysik.island.utility;
 
-import ua.com.barysik.island.animals.Caterpillar;
 import ua.com.barysik.island.baseClases.Alive;
 import ua.com.barysik.island.baseClases.Plant;
 import ua.com.barysik.island.settings.Constants;
 import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Cell extends Thread {
 
-    private final int x;
-    private final int y;
+    private final int width;
+    private final int length;
 
-    public Cell(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Cell(int width, int length) {
+        this.width = width;
+        this.length = length;
     }
 
-    public int getX() {
-        return x;
+    public int getWidth() {
+        return width;
     }
 
-    public int getY() {
-        return y;
+    public int getLength() {
+        return length;
     }
 
     @Override
     public void run() {
         while (!isInterrupted()) {
-            starvation(Initialization.land.getCellArrayList(this.x, this.y));
-            find(Initialization.land.getCellArrayList(this.x, this.y));
+            deathByHunger(Initialization.island.getCellList(this.width, this.length));
+            search(Initialization.island.getCellList(this.width, this.length));
             //решили уйти
             //смогли уйти
             reproduce(new Plant());
-//            System.out.println(Initialization.land.getCellStatistics(this.x, this.y));
         }
     }
 
-    public void find(ArrayList<Alive> alives) {
+    public void search(CopyOnWriteArrayList<Alive> alives) {
+
+//        Rnd
+
         int size = alives.size();
         for (int i = 0; i < size; i = i + 2) {
             int next = i + 1;
+            Alive aliveOne = alives.get(i);
+            Alive aliveTwo = null;
 
-            Alive aliveA = alives.get(i);
-            Alive aliveB = null;
             if (next < size) {
-                aliveB = alives.get(next);
+                aliveTwo = alives.get(next);
             }
 
-            if (aliveB == null) {
+            if (aliveTwo == null) {
                 continue;
             }
 
-            if (aliveA instanceof Animal) {
-                ((Animal) aliveA).hunger();
+            if (aliveOne instanceof Animal) {
+                ((Animal) aliveOne).hunger();
             }
 
-            if (aliveB instanceof Animal) {
-                ((Animal) aliveB).hunger();
+            if (aliveTwo instanceof Animal) {
+                ((Animal) aliveTwo).hunger();
             }
 
-            if (aliveA.getClass() == aliveB.getClass() && aliveA instanceof Animal) {
-                reproduce(aliveA);
-            }
-
-            if (aliveA instanceof Animal && aliveB instanceof Plant) {
-                hunt(aliveA, aliveB);
-                continue;
-            } else if (aliveB instanceof Animal && aliveA instanceof Plant) {
-                hunt(aliveB, aliveA);
-                continue;
-            } else if (aliveA instanceof Plant || aliveB instanceof Plant) {
-                continue;
-            } else if (Parameters.getEatTable(aliveA.getClass().getSimpleName(), aliveB.getClass().getSimpleName()) > 0) {
-                hunt(aliveA, aliveB);
-            } else if (Parameters.getEatTable(aliveB.getClass().getSimpleName(), aliveA.getClass().getSimpleName()) > 0) {
-                hunt(aliveB, aliveA);
+            if (aliveOne.getClass() == aliveTwo.getClass() && aliveOne instanceof Animal) {
+                reproduce(aliveOne);
+            } else if (aliveOne instanceof Animal && aliveTwo instanceof Plant) {
+                hunt(aliveOne, aliveTwo);
+            } else if (aliveTwo instanceof Animal && aliveOne instanceof Plant) {
+                hunt(aliveTwo, aliveOne);
+            } else if (aliveOne instanceof Plant || aliveTwo instanceof Plant) {
+            } else if (Parameters.getEatTable(aliveOne.getClass().getSimpleName(), aliveTwo.getClass().getSimpleName()) > 0) {
+                hunt(aliveOne, aliveTwo);
+            } else if (Parameters.getEatTable(aliveTwo.getClass().getSimpleName(), aliveOne.getClass().getSimpleName()) > 0) {
+                hunt(aliveTwo, aliveOne);
             }
         }
     }
 
     private void hunt(Alive hunter, Alive prey) {
-        double currentSatiety = ((Animal) hunter).getCurrentSatiety();
-        ((Animal) hunter).hunt(prey);
-        if (currentSatiety != ((Animal) hunter).getCurrentSatiety()) {
-//            System.out.println(hunter + " съел " + prey);
-            Initialization.land.remove(this.x, this.y, prey);
-        } else if(hunter instanceof Caterpillar && prey instanceof Plant){
-            Initialization.land.remove(this.x, this.y, prey);
+        boolean hunt = ((Animal) hunter).hunt(prey);
+        if (hunt) {
+            Initialization.island.remove(this.width, this.length, prey);
         }
     }
 
-    private void starvation(ArrayList<Alive> alives) {
+    public void deathByHunger(CopyOnWriteArrayList<Alive> alives) {
         for (Alive alive : alives) {
             if (alive instanceof Plant) {
                 continue;
             }
             if (((Animal) alive).getCurrentSatiety() < 0.001) {
-//                System.out.println("satyety " + alive.getClass().getSimpleName() + " = " + ((Animal) alive).getCurrentSatiety());
-                Initialization.land.remove(this.x, this.y, alive);
-//                System.out.println(alive.getName() + " умер от голода");
+                alives.remove(alive);
             }
         }
     }
 
     private void reproduce(Alive alive) {
-        int countNewAlives = 0;
-        if (Parameters.getParameter(Constants.children, alive.getClass().getSimpleName()) != 0) {
-            countNewAlives = Parameters.getParameter(Constants.children, alive.getClass().getSimpleName()) / 2;
+
+        int countNewAlives;
+        int children = Parameters.getParameter(Constants.children, alive.getClass().getSimpleName());
+
+        if (children != 0) {
+            countNewAlives = ThreadLocalRandom.current().nextInt(children) + 1;
         } else {
             int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
-            int currentAmount = Initialization.land.getAmountAliveInCell(this.x, this.y, alive);
-            countNewAlives = ThreadLocalRandom.current().nextInt(maxAmount - currentAmount) / 2;
+            int currentAmount = Initialization.island.getAmountAliveInCell(this.width, this.length, alive);
+            countNewAlives = ThreadLocalRandom.current().nextInt(maxAmount - currentAmount);
         }
         for (int i = 0; i < countNewAlives; i++) {
             try {
-                if (Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName()) > Initialization.land.getAmountAliveInCell(this.x, this.y, alive)) {
-                    Initialization.land.add(this.x, this.y, alive.getClass().getDeclaredConstructor().newInstance());
+                boolean add = Initialization.island.add(this.width, this.length, alive.getClass().getDeclaredConstructor().newInstance());
+                if (!add) {
+                    return;
                 }
+//                    System.out.println("Родился новый " + alive.getClass().getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
-                System.out.println("Object " + alive.getClass().getSimpleName() + " create error in cell: " + this.x + " " + this.y);
+                System.out.println("Object " + alive.getClass().getSimpleName() + " create error in cell: " + this.width + " " + this.length);
             }
         }
     }

@@ -13,7 +13,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Initialization {
 
-    public static Land land;
+    public static Land island;
+
+    private int cellcalc = 0;
 
     public void start() {
 
@@ -33,15 +35,14 @@ public class Initialization {
 //            System.out.println("Принимаются только положительные числа");
 //            return;
 //        }
-        int coordinateX = 2;
-        int coordinateY = 2;
 
+        int width = 2;
+        int length = 2;
 
-        land = new Land(coordinateX, coordinateY);
+        island = new Land(width, length);
 
-
-        for (int i = 0; i < coordinateX; i++) {
-            for (int j = 0; j < coordinateY; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
                 fillingCell(i, j);
                 new Thread(new Cell(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
@@ -49,10 +50,7 @@ public class Initialization {
         }
 
         new Thread(new Statistics()).start();
-
     }
-
-    private static int cellcalc = 0;
 
     private void fillingCell(int x, int y) {
 
@@ -72,10 +70,9 @@ public class Initialization {
 
             for (int i = 0; i < probability; i++) {
                 try {
-                    land.add(x, y, aClass.getDeclaredConstructor().newInstance());
+                    island.add(x, y, aClass.getDeclaredConstructor().newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
-//                    System.out.println("Object " + aClass.getSimpleName() + " create error in cell: " + x + " " + y);
                 }
             }
         }

@@ -1,100 +1,102 @@
 package ua.com.barysik.island.settings;
 
 import ua.com.barysik.island.baseClases.Alive;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Land {
 
-    private final int x;
-    private final int y;
-    private final HashMap<Long, ArrayList<Alive>> islandCell = new HashMap<>();
+    private final int width;
+    private final int length;
+    private final HashMap<Long, CopyOnWriteArrayList<Alive>> islandCell = new HashMap<>();
 
-    public Land(int x, int y) {
-        this.x = x;
-        this.y = y;
-        System.out.printf("Остров размером %d на %d создан.%n", this.x, this.y);
+
+    public Land(int width, int length) {
+        this.width = width;
+        this.length = length;
+        System.out.printf("An island the size %d to %d created.%n", this.width, this.length);
     }
 
-    public Integer getX() {
-        return this.x;
+    public Integer getWidth() {
+        return this.width;
     }
 
-    public Integer getY() {
-        return this.y;
+    public Integer getLength() {
+        return this.length;
     }
 
-    private boolean correctCell(int x, int y) {
-        if (x > 10_000_000 || y > 10_000_000) {
-            System.out.println("Остров не может быть больше 10_000_000 в ширину или в длину");
+    private boolean correctCell(int width, int length) {
+        if (width > 10_000_000 || length > 10_000_000) {
+            System.out.println("The island cannot be larger than 10_000_000 in width or length.");
             return true;
         }
-        if (x < 0 || y < 0) {
-            System.out.println("Принимаются только положительные числа");
+        if (width < 0 || length < 0) {
+            System.out.println("Only positive numbers are accepted");
             return true;
         }
 
-        if (x > this.x || y > this.y) {
-            System.out.println("Ячейка не существует");
+        if (width > this.width || length > this.length) {
+            System.out.println("Cell does not exist");
             return true;
         }
         return false;
     }
 
-    private void setCell(int x, int y, ArrayList<Alive> list) {
-        if (correctCell(x, y)) {
-            System.out.println("Не удалось записать информацию в ячейку");
-            return;
-        }
-        long index = x * 1_00_000_000L + y;
-        islandCell.put(index, list);
+    private void setCell(int width, int length, CopyOnWriteArrayList<Alive> set) {
+        long index = width * 1_00_000_000L + length;
+        islandCell.put(index, set);
     }
 
-    public boolean add(int x, int y, Alive alive) {
-        if (correctCell(x, y)) {
+    public boolean add(int width, int length, Alive alive) {
+        if (correctCell(width, length)) {
             return false;
         }
-        ArrayList<Alive> cell = getCell(x, y);
-        boolean status = cell.add(alive);
-        setCell(x, y, cell);
-        return status;
-    }
-
-
-    public boolean remove(int x, int y, Alive alive) {
-        if (correctCell(x, y)) {
+        int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
+        int currentAmount = getAmountAliveInCell(width, length, alive);
+        if (maxAmount - currentAmount < 1) {
             return false;
         }
-        ArrayList<Alive> cell = getCell(x, y);
-        boolean status = cell.remove(alive);
-        setCell(x, y, cell);
-        return status;
+        CopyOnWriteArrayList<Alive> cell = getCell(width, length);
+        boolean statusWrite = cell.add(alive);
+        setCell(width, length, cell);
+        return statusWrite;
     }
 
-    private ArrayList<Alive> getCell(int x, int y) {
-        long index = x * 1_00_000_000L + y;
+
+    public boolean remove(int width, int length, Alive alive) {
+        if (correctCell(width, length)) {
+            return false;
+        }
+        CopyOnWriteArrayList<Alive> cell = getCell(width, length);
+        boolean statusWrite = cell.remove(alive);
+        setCell(width, length, cell);
+        return statusWrite;
+    }
+
+    private CopyOnWriteArrayList<Alive> getCell(int width, int length) {
+        long index = width * 1_00_000_000L + length;
         if (islandCell.get(index) == null) {
-            return new ArrayList<Alive>();
+            return new CopyOnWriteArrayList<>();
         }
         return islandCell.get(index);
     }
 
-    public ArrayList getCellArrayList(int x, int y) {
-        ArrayList<Alive> list = getCell(x, y);
-        ArrayList<Alive> alives = new ArrayList<>();
-        for (Alive alive : list) {
-            alives.add(alive);
-        }
-        return alives;
+    public CopyOnWriteArrayList<Alive> getCellList(int width, int length) {
+//        CopyOnWriteArrayList<Alive> list = getCell(width, length);
+//        CopyOnWriteArrayList<Alive> alives = new CopyOnWriteArrayList<>();
+//        for (Alive alive : list) {
+//            alives.add(alive);
+//        }
+        return getCell(width, length);
     }
 
-    public Integer getAmountAliveInCell(int x, int y, Alive alive) {
+    public Integer getAmountAliveInCell(int width, int length, Alive alive) {
         int i = 0;
-        correctCell(x, y);
-        ArrayList<Alive> cell = getCell(x, y);
+        if (correctCell(width, length)) {
+            return 0;
+        }
+        CopyOnWriteArrayList<Alive> cell = getCell(width, length);
         for (Alive allAlive : cell) {
             if (allAlive.getClass() == alive.getClass()) {
                 i++;
@@ -103,37 +105,7 @@ public class Land {
         return i;
     }
 
-    private HashMap<String, Long> setToMap(HashSet<Alive> hashSet, HashMap<String, Long> statistics) {
-        for (Alive alive : hashSet) {
-            String name = alive.getName();
-            if (statistics.containsKey(name)) {
-                Long i = statistics.get(name) + 1;
-                statistics.put(name, i);
-            } else {
-                statistics.put(name, 1L);
-            }
-        }
-        return statistics;
-    }
-
-//    public HashMap<String, Long> getCellStatistics(int x, int y) {
-//        if (correctCell(x, y)) {
-//            System.out.println("Coordinate error");
-//            return new HashMap<>();
-//        }
-//        return setToMap(getCell(x, y), new HashMap<>());
-//    }
-
-    public Collection<ArrayList<Alive>> getAll(){
+    public Collection<CopyOnWriteArrayList<Alive>> getAll() {
         return islandCell.values();
     }
-
-//    public HashMap<String, Long> getIslandStatistics() {
-//        HashMap<String, Long> statistics = new HashMap<>();
-//        Collection<HashSet<Alive>> values = islandCell.values();
-//        for (HashSet<Alive> hashSet : values) {
-//            setToMap(hashSet, statistics);
-//        }
-//        return statistics;
-//    }
 }
