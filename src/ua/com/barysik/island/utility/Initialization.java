@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Initialization {
 
     public static IsLand island;
+    public static IsLand islandTwo;
 
     private int cellcalc = 0;
 
@@ -26,25 +27,21 @@ public class Initialization {
         int width = new Scanner(System.in).nextInt();
 
         System.out.println("Введите размер острова по вертикали");
-        int length = new Scanner(System.in).nextInt();
+        int height = new Scanner(System.in).nextInt();
 
-        if (width > 10_000_000 || length > 10_000_000) {
+        if (width > 10_000_000 || height > 10_000_000) {
             System.out.println("Остров не может быть больше 10_000_000 в ширину или в длину");
             return;
         }
-        if (width < 0 || length < 0) {
+        if (width < 0 || height < 0) {
             System.out.println("Принимаются только положительные числа");
             return;
         }
 
-//        for test
-//        int width = 2;
-//        int length = 2;
-
-        island = new IsLand(width, length);
+        island = new IsLand(width, height);
 
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < height; j++) {
                 fillingCell(i, j);
 //                new CellAction(i, j);
                 new Thread(new CellAction(i, j)).start();
@@ -72,7 +69,7 @@ public class Initialization {
 
             for (int i = 0; i < probability; i++) {
                 try {
-                    island.add(x, y, 0, aClass.getDeclaredConstructor().newInstance());
+                    island.add(x, y, aClass.getDeclaredConstructor().newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
                 }

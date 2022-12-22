@@ -4,78 +4,97 @@ import ua.com.barysik.island.entities.Alive;
 import ua.com.barysik.island.entities.animals.Animal;
 import ua.com.barysik.island.entities.plants.Plant;
 import ua.com.barysik.island.settings.Constants;
+import ua.com.barysik.island.settings.Directions;
 import ua.com.barysik.island.settings.Parameters;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CellAction extends Thread {
 
     private final int width;
-    private final int length;
-//    private hashMap<>();
+    private final int height;
 
-    public CellAction(int width, int length) {
+    public CellAction(int width, int height) {
         this.width = width;
-        this.length = length;
+        this.height = height;
     }
-
-//    public int getWidth() {
-//        return width;
-//    }
-//
-//    public int getLength() {
-//        return length;
-//    }
 
     @Override
     public void run() {
         while (!isInterrupted()) {
-            deathByHunger(Initialization.island.getCellList(this.width, this.length, 0));
-            Initialization.island.shuffleCell(this.width, this.length);
-            search(Initialization.island.getCellList(this.width, this.length, 0));
+            deathByHunger(Initialization.island.getCellList(this.width, this.height));
+            Initialization.island.shuffleCell(this.width, this.height);
+            search(Initialization.island.getCellList(this.width, this.height));
             reproduce(new Plant());
-            //решили уйти
-            //смогли уйти
-            //если нельзя пройти генерация в другом направлении
-            //если координаты за размерами поля
+            CopyOnWriteArrayList<Alive> cellList = Initialization.island.getCellList(this.width, this.height);
+            for (Alive alive : cellList) {
+                if (alive instanceof Animal) {
+                    if (((Animal) alive).getGoAway()) {
+                        transition((Animal) alive);
+                    }
+                }
+            }
             accept();
         }
     }
 
-    private boolean isLeave() {
+    private void transition(Animal animal) {
+        int movingWidth = this.width;
+        int movingHeight = this.height;
+        ArrayList<Directions> direction = animal.run();
 
-        boolean isLeave = true;
-        // если что? то хочет уйти
-        return isLeave;
-    }
+        for (int i = 0; i < direction.size(); i++) {
 
-    private void leave(Alive alive) {
+            if (direction.get(0) == Directions.LEFT) {
+                movingWidth = movingWidth - 1;
+            } else if (direction.get(0) == Directions.RIGHT) {
+                movingWidth = movingWidth + 1;
+            } else if (direction.get(0) == Directions.UP) {
+                movingHeight = movingHeight + 1;
+            } else if (direction.get(0) == Directions.DOWN) {
+                movingHeight = movingHeight - 1;
+            }
+            direction.remove(0);
 
-//        if(хотят уйти?)
-//        if(умещаются в новой локации?)
+            if (movingWidth < 0) {
+                movingWidth = Initialization.island.getWidth() - movingWidth;
+                if (movingWidth < 0) {
+                    movingWidth = this.width;
+                }
+            }
 
-            Initialization.island.add(this.width, this.length, 1, alive);
-            Initialization.island.remove(this.width, this.length, 0, alive);
+            if (movingHeight < 0) {
+                movingHeight = Initialization.island.getHeight() - movingHeight;
+                if (movingHeight < 0) {
+                    movingHeight = this.height;
+                }
+            }
+        }
 
-//            если не умещаются, то заново генерировать путь
-//            генерация пути по методу для животного
-//            предусмотреть вход и выход метода
+        boolean triggerA = movingWidth == this.width;
+        boolean triggerB = movingHeight == this.height;
+        boolean triggerC = Initialization.island.getAmountAliveInCell(movingWidth, movingHeight, animal) < animal.getAmount();
+
+        if (!triggerA && !triggerB && triggerC) {
+            Initialization.islandTwo.add(movingWidth, movingHeight, animal);
+            Initialization.island.remove(this.width, this.height, animal);
+        }
     }
 
     private void accept() {
         while (true) {
-            CopyOnWriteArrayList<Alive> runList = Initialization.island.getCellList(this.width, this.length, 1);
+            CopyOnWriteArrayList<Alive> runList = Initialization.islandTwo.getCellList(this.width, this.height);
             if (runList.size() == 0) {
                 return;
             }
             Alive alive = runList.get(0);
-            Initialization.island.add(this.width, this.length, 0, alive);
-            Initialization.island.remove(this.width, this.length, 1, alive);
+            Initialization.island.add(this.width, this.height, alive);
+            Initialization.islandTwo.remove(this.width, this.height, alive);
         }
     }
-
 
     private void search(CopyOnWriteArrayList<Alive> alivesList) {
 
@@ -118,7 +137,7 @@ public class CellAction extends Thread {
     private void hunt(Alive hunter, Alive prey) {
         boolean hunt = ((Animal) hunter).hunt(prey);
         if (hunt) {
-            Initialization.island.remove(this.width, this.length, 0, prey);
+            Initialization.island.remove(this.width, this.height, prey);
         }
     }
 
@@ -137,7 +156,7 @@ public class CellAction extends Thread {
 
         int countNewAlives = 0;
         int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
-        int currentAmount = Initialization.island.getAmountAliveInCell(this.width, this.length, alive);
+        int currentAmount = Initialization.island.getAmountAliveInCell(this.width, this.height, alive);
         int children = Parameters.getParameter(Constants.children, alive.getClass().getSimpleName());
 
         if (children != 0) {
@@ -148,14 +167,14 @@ public class CellAction extends Thread {
 
         for (int i = 0; i < countNewAlives; i++) {
             try {
-                boolean add = Initialization.island.add(this.width, this.length, 0, alive.getClass().getDeclaredConstructor().newInstance());
+                boolean add = Initialization.island.add(this.width, this.height, alive.getClass().getDeclaredConstructor().newInstance());
                 if (!add) {
                     break;
                 }
 //                    System.out.println("Родился новый " + alive.getClass().getSimpleName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
-                System.out.println("Object " + alive.getClass().getSimpleName() + " create error in cell: " + this.width + " " + this.length);
+                System.out.println("Object " + alive.getClass().getSimpleName() + " create error in cell: " + this.width + " " + this.height);
             }
         }
     }

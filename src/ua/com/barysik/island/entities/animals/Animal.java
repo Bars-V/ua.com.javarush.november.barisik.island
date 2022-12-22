@@ -14,7 +14,19 @@ public abstract class Animal extends Alive {
     private double currentSatiety = maxSatiety;
     private final double hunger = maxSatiety * Parameters.getParameterDouble(Constants.hunger, getClass().getSimpleName()) / 100;
     private final double eatWeith = Parameters.getParameterDouble(Constants.eatWeith, getClass().getSimpleName());
-    private final int speed = Parameters.getParameter(Constants.speed, getClass().getSimpleName());
+//    private final int speed = Parameters.getParameter(Constants.speed, getClass().getSimpleName());
+    private final int amount = Parameters.getParameter(Constants.amount, getClass().getSimpleName());
+
+    public boolean getGoAway(){
+        if(currentSatiety < maxSatiety* 3/4){
+            return true;
+        }
+        return false;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 
     public double getCurrentSatiety() {
         return currentSatiety;

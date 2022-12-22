@@ -10,95 +10,94 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class IsLand {
 
     private final int width;
-    private final int length;
+    private final int height;
     private final HashMap<Long, CopyOnWriteArrayList<Alive>> islandCell = new HashMap<>();
 
 
-    public IsLand(int width, int length) {
+    public IsLand(int width, int height) {
         this.width = width;
-        this.length = length;
-        System.out.printf("An island the size %d to %d created.%n", this.width, this.length);
+        this.height = height;
+        System.out.printf("An island the size %d to %d created.%n", this.width, this.height);
     }
 
     public Integer getWidth() {
         return this.width;
     }
 
-    public Integer getLength() {
-        return this.length;
+    public Integer getHeight() {
+        return this.height;
     }
 
-    private boolean correctCell(int width, int length) {
-        if (width > 10_000_000 || length > 10_000_000) {
-            System.out.println("The island cannot be larger than 10_000_000 in width or length.");
+    private boolean correctCell(int width, int height) {
+        if (width > 10_000_000 || height > 10_000_000) {
+            System.out.println("The island cannot be larger than 10_000_000 in width or height.");
             return true;
         }
-        if (width < 0 || length < 0) {
+        if (width < 0 || height < 0) {
             System.out.println("Only positive numbers are accepted");
             return true;
         }
 
-        if (width > this.width || length > this.length) {
+        if (width > this.width || height > this.height) {
             System.out.println("Cell does not exist");
             return true;
         }
         return false;
     }
 
-    private void setCell(int width, int length, int numberTargetMap, CopyOnWriteArrayList<Alive> set) {
-        long index = width * 1_00_000_000L + length;
-        index = numberTargetMap * (long) Math.pow(10.0, 15.0) + index;
+    private void setCell(int width, int height, CopyOnWriteArrayList<Alive> set) {
+        long index = width * 1_00_000_000L + height;
+//        index = numberTargetMap * (long) Math.pow(10.0, 15.0) + index;
         islandCell.put(index, set);
     }
 
-    public boolean add(int width, int length, int numberTargetMap, Alive alive) {
-        if (correctCell(width, length)) {
+    public boolean add(int width, int height, Alive alive) {
+        if (correctCell(width, height)) {
             return false;
         }
         int maxAmount = Parameters.getParameter(Constants.amount, alive.getClass().getSimpleName());
-        int currentAmount = getAmountAliveInCell(width, length, alive);
+        int currentAmount = getAmountAliveInCell(width, height, alive);
         if (maxAmount - currentAmount < 1) {
             return false;
         }
-        CopyOnWriteArrayList<Alive> cell = getCell(width, length, numberTargetMap);
+        CopyOnWriteArrayList<Alive> cell = getCell(width, height);
         boolean statusWrite = cell.add(alive);
-        setCell(width, length, numberTargetMap, cell);
+        setCell(width, height, cell);
         return statusWrite;
     }
 
-    public void remove(int width, int length, int numberTargetMap, Alive alive) {
-        if (correctCell(width, length)) {
-            return;
-        }
-        CopyOnWriteArrayList<Alive> cell = getCell(width, length, numberTargetMap);
+    public void remove(int width, int height,  Alive alive) {
+//        if (correctCell(width, height) && numberTargetMap == 0) {
+//            return;
+//        }
+        CopyOnWriteArrayList<Alive> cell = getCell(width, height);
         cell.remove(alive);
-        setCell(width, length, numberTargetMap, cell);
+        setCell(width, height, cell);
     }
 
-    private CopyOnWriteArrayList<Alive> getCell(int width, int length, int numberTargetMap) {
-
-        long index = width * 10_00_000_000L + length;
-        index = numberTargetMap * (long) Math.pow(10.0, 15.0) + index;
+    private CopyOnWriteArrayList<Alive> getCell(int width, int height) {
+        long index = width * 10_00_000_000L + height;
+//        index = numberTargetMap * (long) Math.pow(10.0, 15.0) + index;
         if (islandCell.get(index) == null) {
             return new CopyOnWriteArrayList<>();
         }
         return islandCell.get(index);
     }
 
-    public void shuffleCell(int width, int length) {
-        setCell(width, length, 0, getCellList(width, length, 0));
+    public void shuffleCell(int width, int height) {
+        setCell(width, height, getCellList(width, height));
     }
 
-    public CopyOnWriteArrayList<Alive> getCellList(int width, int length, int numberTargetMap) {
-        return getCell(width, length, numberTargetMap);
+    public CopyOnWriteArrayList<Alive> getCellList(int width, int height) {
+        return getCell(width, height);
     }
 
-    public Integer getAmountAliveInCell(int width, int length, Alive alive) {
+    public Integer getAmountAliveInCell(int width, int height, Alive alive) {
         int i = 0;
-        if (correctCell(width, length)) {
+        if (correctCell(width, height)) {
             return 0;
         }
-        CopyOnWriteArrayList<Alive> cell = getCell(width, length, 0);
+        CopyOnWriteArrayList<Alive> cell = getCell(width, height);
         for (Alive allAlive : cell) {
             if (allAlive.getClass() == alive.getClass()) {
                 i++;
@@ -110,6 +109,4 @@ public class IsLand {
     public Collection<CopyOnWriteArrayList<Alive>> getAll() {
         return islandCell.values();
     }
-
-
 }
