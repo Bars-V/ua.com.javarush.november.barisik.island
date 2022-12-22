@@ -14,35 +14,70 @@ public class CellAction extends Thread {
 
     private final int width;
     private final int length;
+//    private hashMap<>();
 
     public CellAction(int width, int length) {
         this.width = width;
         this.length = length;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getLength() {
-        return length;
-    }
+//    public int getWidth() {
+//        return width;
+//    }
+//
+//    public int getLength() {
+//        return length;
+//    }
 
     @Override
     public void run() {
         while (!isInterrupted()) {
-            deathByHunger(Initialization.island.getCellList(this.width, this.length));
+            deathByHunger(Initialization.island.getCellList(this.width, this.length, 0));
             Initialization.island.shuffleCell(this.width, this.length);
-            search(Initialization.island.getCellList(this.width, this.length));
+            search(Initialization.island.getCellList(this.width, this.length, 0));
+            reproduce(new Plant());
             //решили уйти
             //смогли уйти
-            reproduce(new Plant());
+            //если нельзя пройти генерация в другом направлении
+            //если координаты за размерами поля
+            accept();
         }
     }
 
-    public void search(CopyOnWriteArrayList<Alive> alivesList) {
+    private boolean isLeave() {
 
-//        int size = alivesList.size();
+        boolean isLeave = true;
+        // если что? то хочет уйти
+        return isLeave;
+    }
+
+    private void leave(Alive alive) {
+
+//        if(хотят уйти?)
+//        if(умещаются в новой локации?)
+
+            Initialization.island.add(this.width, this.length, 1, alive);
+            Initialization.island.remove(this.width, this.length, 0, alive);
+
+//            если не умещаются, то заново генерировать путь
+//            генерация пути по методу для животного
+//            предусмотреть вход и выход метода
+    }
+
+    private void accept() {
+        while (true) {
+            CopyOnWriteArrayList<Alive> runList = Initialization.island.getCellList(this.width, this.length, 1);
+            if (runList.size() == 0) {
+                return;
+            }
+            Alive alive = runList.get(0);
+            Initialization.island.add(this.width, this.length, 0, alive);
+            Initialization.island.remove(this.width, this.length, 1, alive);
+        }
+    }
+
+
+    private void search(CopyOnWriteArrayList<Alive> alivesList) {
 
         for (int i = 0; i < alivesList.size(); i = i + 2) {
             int next = i + 1;
@@ -83,11 +118,11 @@ public class CellAction extends Thread {
     private void hunt(Alive hunter, Alive prey) {
         boolean hunt = ((Animal) hunter).hunt(prey);
         if (hunt) {
-            Initialization.island.remove(this.width, this.length, prey);
+            Initialization.island.remove(this.width, this.length, 0, prey);
         }
     }
 
-    public void deathByHunger(CopyOnWriteArrayList<Alive> alives) {
+    private void deathByHunger(CopyOnWriteArrayList<Alive> alives) {
         for (Alive alive : alives) {
             if (alive instanceof Plant) {
                 continue;
@@ -113,7 +148,7 @@ public class CellAction extends Thread {
 
         for (int i = 0; i < countNewAlives; i++) {
             try {
-                boolean add = Initialization.island.add(this.width, this.length, alive.getClass().getDeclaredConstructor().newInstance());
+                boolean add = Initialization.island.add(this.width, this.length, 0, alive.getClass().getDeclaredConstructor().newInstance());
                 if (!add) {
                     break;
                 }

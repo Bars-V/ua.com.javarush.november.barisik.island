@@ -51,7 +51,6 @@ public class Initialization {
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }
-
         new Thread(new Statistics()).start();
     }
 
@@ -73,7 +72,7 @@ public class Initialization {
 
             for (int i = 0; i < probability; i++) {
                 try {
-                    island.add(x, y, aClass.getDeclaredConstructor().newInstance());
+                    island.add(x, y, 0, aClass.getDeclaredConstructor().newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
                 }
