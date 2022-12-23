@@ -39,11 +39,12 @@ public class Initialization {
         }
 
         island = new IsLand(width, height);
+        islandTwo = new IsLand(width, height);
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 fillingCell(i, j);
-//                new CellAction(i, j);
+                new CellAction(i, j);
                 new Thread(new CellAction(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
@@ -60,7 +61,7 @@ public class Initialization {
         aliveClass.add(Duck.class);
         aliveClass.add(Caterpillar.class);
         aliveClass.add(Plant.class);
-        aliveClass.add(Bush.CarnivorousBush.class);
+//        aliveClass.add(Bush.CarnivorousBush.class);
 
         for (Class<? extends Alive> aClass : aliveClass) {
 

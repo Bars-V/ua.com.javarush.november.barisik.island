@@ -11,7 +11,7 @@ public class Statistics extends Thread {
     @Override
     public void run(){
 
-        while (true) {
+        while (!isInterrupted()) {
 
             HashMap<String, Long> statistics = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class Statistics extends Thread {
             System.out.println(statistics);
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

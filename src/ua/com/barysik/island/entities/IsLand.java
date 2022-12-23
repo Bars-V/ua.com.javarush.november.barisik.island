@@ -17,7 +17,7 @@ public class IsLand {
     public IsLand(int width, int height) {
         this.width = width;
         this.height = height;
-        System.out.printf("An island the size %d to %d created.%n", this.width, this.height);
+//        System.out.printf("An island the size %d to %d created.%n", this.width, this.height);
     }
 
     public Integer getWidth() {
@@ -67,16 +67,16 @@ public class IsLand {
     }
 
     public void remove(int width, int height,  Alive alive) {
-//        if (correctCell(width, height) && numberTargetMap == 0) {
-//            return;
-//        }
+        if (correctCell(width, height)) {
+            return;
+        }
         CopyOnWriteArrayList<Alive> cell = getCell(width, height);
         cell.remove(alive);
         setCell(width, height, cell);
     }
 
     private CopyOnWriteArrayList<Alive> getCell(int width, int height) {
-        long index = width * 10_00_000_000L + height;
+        long index = width * 1_00_000_000L + height;
 //        index = numberTargetMap * (long) Math.pow(10.0, 15.0) + index;
         if (islandCell.get(index) == null) {
             return new CopyOnWriteArrayList<>();

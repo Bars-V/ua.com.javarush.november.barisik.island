@@ -42,37 +42,44 @@ public class CellAction extends Thread {
     }
 
     private void transition(Animal animal) {
+        int widthMax = Initialization.island.getWidth();
+        int heightMax = Initialization.island.getHeight();
         int movingWidth = this.width;
         int movingHeight = this.height;
         ArrayList<Directions> direction = animal.run();
 
         for (int i = 0; i < direction.size(); i++) {
 
-            if (direction.get(0) == Directions.LEFT) {
+            if (direction.get(i) == Directions.LEFT) {
                 movingWidth = movingWidth - 1;
-            } else if (direction.get(0) == Directions.RIGHT) {
+            } else if (direction.get(i) == Directions.RIGHT) {
                 movingWidth = movingWidth + 1;
-            } else if (direction.get(0) == Directions.UP) {
+            } else if (direction.get(i) == Directions.UP) {
                 movingHeight = movingHeight + 1;
-            } else if (direction.get(0) == Directions.DOWN) {
+            } else if (direction.get(i) == Directions.DOWN) {
                 movingHeight = movingHeight - 1;
             }
-            direction.remove(0);
 
-            if (movingWidth < 0) {
-                movingWidth = Initialization.island.getWidth() - movingWidth;
+            while (movingWidth < 0 || movingWidth > widthMax) {
                 if (movingWidth < 0) {
-                    movingWidth = this.width;
+                    movingWidth = widthMax + movingWidth;
+                }
+                if (movingWidth > widthMax) {
+                    movingWidth = movingWidth - widthMax;
                 }
             }
 
-            if (movingHeight < 0) {
-                movingHeight = Initialization.island.getHeight() - movingHeight;
+            while (movingHeight < 0 || movingHeight > heightMax) {
                 if (movingHeight < 0) {
-                    movingHeight = this.height;
+                    movingHeight = heightMax + movingHeight;
+                }
+                if (movingHeight > heightMax) {
+                    movingHeight = movingHeight - widthMax;
                 }
             }
         }
+
+//        System.out.printf("Текущие координаты x: %d y: %d - новые координаты x: %d y: %d \n", this.width, this.height, movingWidth, movingHeight);
 
         boolean triggerA = movingWidth == this.width;
         boolean triggerB = movingHeight == this.height;
@@ -80,6 +87,7 @@ public class CellAction extends Thread {
 
         if (!triggerA && !triggerB && triggerC) {
             Initialization.islandTwo.add(movingWidth, movingHeight, animal);
+//            System.out.printf("%s ушел из x:%d y:%d в x:%d y:%d \n", animal.getName(), this.width, this.height, movingWidth, movingHeight);
             Initialization.island.remove(this.width, this.height, animal);
         }
     }
@@ -93,6 +101,7 @@ public class CellAction extends Thread {
             Alive alive = runList.get(0);
             Initialization.island.add(this.width, this.height, alive);
             Initialization.islandTwo.remove(this.width, this.height, alive);
+//            System.out.printf("%s пришел в x:%d y:%d \n", alive.getName(),  this.width, this.height);
         }
     }
 
