@@ -98,6 +98,9 @@ public class IsLand {
             return 0;
         }
         CopyOnWriteArrayList<Alive> cell = getCell(width, height);
+        if (cell.size() == 0){
+            return 0;
+        }
         for (Alive allAlive : cell) {
             if (allAlive.getClass() == alive.getClass()) {
                 i++;

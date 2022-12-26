@@ -25,6 +25,7 @@ public class CellAction extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
+//        System.out.printf("Поток с ячейки координаты x:%d y:%d запущен\n", this.width, this.height);
             deathByHunger(Initialization.island.getCellList(this.width, this.height));
             Initialization.island.shuffleCell(this.width, this.height);
             search(Initialization.island.getCellList(this.width, this.height));
@@ -38,6 +39,12 @@ public class CellAction extends Thread {
                 }
             }
             accept();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

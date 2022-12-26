@@ -10,7 +10,7 @@ import ua.com.barysik.island.settings.Parameters;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 
 public class Initialization {
 
@@ -38,19 +38,26 @@ public class Initialization {
             return;
         }
 
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        ExecutorService executorService = Executors.newCachedThreadPool();
         island = new IsLand(width, height);
         islandTwo = new IsLand(width, height);
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 fillingCell(i, j);
-                new CellAction(i, j);
-                new Thread(new CellAction(i, j)).start();
                 System.out.printf("Cell №\t%d\tcreated\n", ++cellcalc);
             }
         }
-        new Thread(new Statistics()).start();
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                executorService.execute(new CellAction(i, j));
+            }
+        }
+        executor.scheduleAtFixedRate(new Thread(new Statistics()), 5, 1, TimeUnit.SECONDS);
     }
+
 
     private void fillingCell(int x, int y) {
 

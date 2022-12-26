@@ -11,8 +11,6 @@ public class Statistics extends Thread {
     @Override
     public void run(){
 
-        while (!isInterrupted()) {
-
             HashMap<String, Long> statistics = new HashMap<>();
 
             Collection<CopyOnWriteArrayList<Alive>> list = Initialization.island.getAll();
@@ -29,14 +27,6 @@ public class Statistics extends Thread {
                 }
             }
             System.out.println(statistics);
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 }
 
