@@ -55,7 +55,7 @@ public class Initialization {
                 executorService.execute(new CellAction(i, j));
             }
         }
-        executor.scheduleAtFixedRate(new Thread(new Statistics()), 5, 1, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(new Thread(new Statistics()), 0, 1, TimeUnit.SECONDS);
     }
 
 
@@ -68,12 +68,26 @@ public class Initialization {
         aliveClass.add(Duck.class);
         aliveClass.add(Caterpillar.class);
         aliveClass.add(Plant.class);
-//        aliveClass.add(Bush.CarnivorousBush.class);
+        aliveClass.add(Bush.CarnivorousBush.class);
+        aliveClass.add(Anaconda.class);
+        aliveClass.add(Fox.class);
+        aliveClass.add(Bear.class);
+        aliveClass.add(Eagle.class);
+        aliveClass.add(Deer.class);
+        aliveClass.add(Rabbit.class);
+        aliveClass.add(Mouse.class);
+        aliveClass.add(Goat.class);
+        aliveClass.add(Sheep.class);
+        aliveClass.add(Boar.class);
+        aliveClass.add(Buffalo.class);
 
         for (Class<? extends Alive> aClass : aliveClass) {
 
             int amount = Parameters.getParameter(Constants.amount, aClass.getSimpleName());
             int probability = ThreadLocalRandom.current().nextInt(amount);
+            if (probability < 2){
+                probability = 2;
+            }
 
             for (int i = 0; i < probability; i++) {
                 try {
